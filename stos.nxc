@@ -6,20 +6,20 @@
    int pos;                                 \
 };                                          \
                                             \
-void stos_##TYPE_init(Stos_##TYPE& stos, int size)        \
+void stos_##TYPE##_init(Stos_##TYPE& stos, int size)        \
 {                                                  \
     ArrayInit(stos.data, 0, size);                  \
     stos.pos = 0;                                    \
 }                                                     \
                                                        \
-TYPE stos_##TYPE_top(Stos_##TYPE& stos)                                \
+TYPE stos_##TYPE##_top(Stos_##TYPE& stos)                                \
 {                                                        \
   if (stos.pos>0)                                         \
     return stos.data[stos.pos-1];                            \
   return 0;                            \
 }                                                           \
                                                              \
-bool stos_##TYPE_empty(Stos_##TYPE& stos)                                   \
+bool stos_##TYPE##_empty(Stos_##TYPE& stos)                                   \
 {                                                            \
   if (stos.pos==0)                                             \
     return 1;                                                   \
@@ -27,13 +27,13 @@ bool stos_##TYPE_empty(Stos_##TYPE& stos)                                   \
     return 0;                                                     \
 }                                                                  \
                                                                      \
-void stos_##TYPE_push(Stos_##TYPE& stos, TYPE e)                                   \
+void stos_##TYPE##_push(Stos_##TYPE& stos, TYPE e)                                   \
 {                                                           \
   stos.data[stos.pos]=e;                                     \
   stos.pos++;                                                 \
 }                                                              \
                                                                 \
-void stos_##TYPE_pop(Stos_##TYPE& stos)                                        \
+void stos_##TYPE##_pop(Stos_##TYPE& stos)                                        \
 {                                                                 \
   if (stos.pos>0)                                                  \
      stos.pos--;                       \

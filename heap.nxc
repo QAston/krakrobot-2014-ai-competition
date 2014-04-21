@@ -1,0 +1,95 @@
+#include "vector.nxc"
+VECTOR(int)
+
+#define HEAP(TYPE) \
+                    \
+int heap_##TYPE##_minimum(int a, int indexa, int b, int indexb) {                   \
+    if (a < b)                                                                       \
+        return indexa;                                                                \
+                                                                                       \
+    else                                                                                \
+        return indexb;                                                                   \
+} \
+void heap_##TYPE##_percolateDown(Vector_##TYPE& h, int index) {     \
+                                                                    \
+    while(true)                                                     \
+    {                                                                \
+        if ((2*index+1) <= h.size) {                                    \
+                                                                                     \
+            int min = heap_##TYPE##_minimum(h.data[2*index - 1], 2*index - 1, h.data[2*index], 2*index) + 1; \
+                                                                                              \
+            if (h.data[index - 1] > h.data[min - 1]) {                                         \
+                vector_##TYPE##_swap(h, index - 1, min - 1);                                    \
+                                                                                                 \
+                index = min;                                                                      \
+                continue;                                                                          \
+            }                                                                                       \
+            break;                                                                                   \
+        }                                                                                             \
+                                                                                                       \
+        if (h.size == 2*index) {                                                                       \
+            if (h.data[index - 1] > h.data[2*index - 1])                                                 \
+                vector_##TYPE##_swap(h, index - 1, 2*index - 1);                                                          \
+        }                                                                                                  \
+        break;                                                                                              \
+    }                                                                                                        \
+}        \
+             \
+void heap_##TYPE##_make(Vector_##TYPE& h) { \
+                                        \
+    int i;                                 \
+                                             \
+    for (i=h.size/2; i>0; i--)                  \
+        heap_##TYPE##_percolateDown(h, i);       \
+}                                                  \
+void heap_##TYPE##_percolateUp(Vector_##TYPE& h, int index) {                                                   \
+                                                                                                                 \
+    while(index > 1) {                                                                                            \
+                                                                                                                   \
+        if (h.data[index/2 - 1] > h.data[index - 1]) {                                                               \
+                                                                                                                      \
+            vector_##TYPE##_swap(h, index - 1, index/2 - 1);                                                            \
+                                                                                                                         \
+            index = index / 2;                                                                                             \
+        }                                                                                                                   \
+    }                                                                                                                        \
+}                                                                                                                             \
+void heap_##TYPE##_insert(Vector_##TYPE& vec, TYPE value) {                                                                     \
+                                                                                                                                 \
+    vector_##TYPE##_put(vec, value);                                                                                              \
+    heap_##TYPE##_percolateUp(vec, vec.size);                                                                                      \
+}                \
+                 \
+                                                                                                                            \
+                                                                                                                                   \
+TYPE heap_##TYPE##_removeMin(Vector_##TYPE& h, int def) {                                                                             \
+                                                                                                                                       \
+    int retval;                                                                                                                         \
+                                                                                                                                         \
+    if (h.size > 0) {                                                                                                                     \
+                                                                                                                                           \
+        retval = h.data[0];                                                                                                                 \
+                                                                       \
+        h.data[0] = h.data[h.size-1];                                  \
+                                                                         \
+        h.size--;                                                         \
+                                                                           \
+        heap_##TYPE##_percolateDown(h, 1);                                  \
+                                                                             \
+        return retval;                                                        \
+    }                                                                          \
+    else                                                                        \
+        return def;                                                              \
+}
+
+
+
+Vector_int v;
+HEAP(int);
+
+task main()
+{
+   vector_int_init(v, 10);
+   heap_int_make(v);
+}
+

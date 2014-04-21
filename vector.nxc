@@ -1,0 +1,51 @@
+#define VECTOR(TYPE)      \
+                           \
+struct Vector_##TYPE                \
+{                             \
+  TYPE data[];                 \
+  int size;                     \
+};                               \
+\
+void vector_##TYPE##_resize(Vector_##TYPE& vec, int size)        \
+{          \
+    int s = ArrayLen(vec.data);                        \
+    if (s < size)                                      \
+    {                     \
+      while(size > s)                                   \
+      {                                   \
+         s *= 2;                                       \
+      }                                           \
+      TYPE tmp[];                                     \
+      int olds = ArrayLen(vec.data);                     \
+      ArrayInit(tmp, 0, olds);                            \
+      ArraySubset(tmp, vec.data, 0, olds);                 \
+      ArrayInit(vec.data, 0, s);                            \
+      ArraySubset(vec.data, tmp, 0, s);                                             \
+    }                                                    \
+    vec.size = size;                  \
+}                                      \
+                                  \
+void vector_##TYPE##_init(Vector_##TYPE& vec, int capacity)        \
+{                                                  \
+    ArrayInit(vec.data, 0, capacity);                  \
+    vec.size = 0;                                    \
+}                                                     \
+                                                               \
+void vector_##TYPE##_put(Vector_##TYPE& vec, TYPE e)        \
+{                                                         \
+    vector_##TYPE##_resize(vec, vec.size+1);                                                \
+    vec.data[vec.size-1] = e;                                             \
+}   \
+\
+void vector_##TYPE##_swap(Vector_##TYPE& vec, int index1, int index2) {                        \
+    TYPE temp = vec.data[index1];                                             \
+    vec.data[index1] = vec.data[index2];                                 \
+    vec.data[index2] = temp;                                                 \
+}
+
+//VECTOR(int)
+//
+//task main()
+//{
+//}
+
