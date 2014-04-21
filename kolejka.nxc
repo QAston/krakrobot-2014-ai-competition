@@ -1,0 +1,60 @@
+#define QUEUE(TYPE)    \
+struct Queue_##TYPE     \
+{                        \
+  TYPE data[];            \
+  int begin;               \
+  int end;                  \
+};                            \
+\
+bool queue_##TYPE##_empty(Queue_##TYPE& queue)                             \
+{                                                                         \
+  if (queue.begin == queue.end)                                            \
+    return 1;                                                               \
+  else                                                                       \
+    return 0;                                                                 \
+}                                                                             \
+                                                           \
+void queue_##TYPE##_init(Queue_##TYPE& queue, int size)       \
+{                                                            \
+    ArrayInit(queue.data, 0, size);                           \
+    queue.begin = 0;                                           \
+    queue.end = 0;                                              \
+}                                                                 \
+                                                                 \
+TYPE queue_##TYPE##_front(Queue_##TYPE& queue)                      \
+{                                                                  \
+  if (!queue_##TYPE##_empty(queue))                                                \
+    return queue.data[queue.begin];                                  \
+  return 0;                                                           \
+}                                                                      \
+                                                                        \
+                                                                               \
+void queue_##TYPE##_put(Queue_##TYPE& queue,TYPE e)                               \
+{                                                                                \
+  queue.data[queue.end]=e;                                                        \
+                                                                                   \
+  if ((queue.end + 1)<ArrayLen(queue.data))                                         \
+  {                                                                                  \
+    queue.end++;                                                                      \
+  }                                                                                    \
+  else                                                                                  \
+  {                                                                                      \
+    queue.end =0;                                                                         \
+  }                                                                                        \
+}                                                                                           \
+                                                                                            \
+void queue_##TYPE##_pop(Queue_##TYPE& queue)                                                   \
+{                                                                                             \
+  if (!queue_##TYPE##_empty(queue))                                                              \
+  {                                                                                             \
+    if ((queue.begin + 1) < ArrayLen(queue.data))                                                \
+       queue.begin++;                                                                             \
+    else                                                                                           \
+       queue.begin=0;                                                                               \
+  }                                                                                                  \
+}                                                                                             \
+                                                                                             \
+void queue_##TYPE##_makeEmpty(Queue_##TYPE & queue)                                            \
+{                                                                                           \
+  queue.begin = queue.end;                                                                   \
+}

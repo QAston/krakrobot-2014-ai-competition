@@ -1,0 +1,184 @@
+#define LEFT_MOTOR OUT_A
+#define RIGHT_MOTOR OUT_C
+#define MOVE_MOTORS OUT_AC
+#define COLOR_MOTOR OUT_B
+
+#define PLANSZA_ROZMIAR 5
+
+#include "stos.nxc"
+STOS(int)
+#include "kolejka.nxc"
+QUEUE(int)
+
+int debugIndex = 0;
+void debug(string text)
+{
+     ClearLine( LCD_LINE1 - debugIndex);
+     TextOut(0, LCD_LINE1 - debugIndex, text, 0);
+     debugIndex+=8;
+     debugIndex %= LCD_LINE1;
+}
+
+void blad(string tekst1, string tekst2="", string tekst3="")
+{
+     PlaySound(SOUND_DOUBLE_BEEP);
+     PlaySound(SOUND_DOUBLE_BEEP);
+     debug(tekst1);
+     debug(tekst2);
+     debug(tekst3);
+     while(true);
+}
+
+enum WiezaTyp
+{
+    WIEZA_BRAK,
+    WIEZA_NIEBIESKA,
+    WIEZA_BIALA
+};
+
+struct Pole
+{
+    bool znane;
+    WiezaTyp wieza;
+};
+
+// poczatek ukladu jest w punkcie koncowym
+int pozycjaX = 4;
+int pozycjaY = 4;
+bool wracamy = false;
+Pole plansza[PLANSZA_ROZMIAR][PLANSZA_ROZMIAR];
+// do astara
+int calcHeurystyka(int x, int y, int powrot)
+{
+    if (powrot)
+       return 8 - x - y;
+    return x + y;
+}
+
+
+
+//void search(pos, angle, current_goal_area, grid)
+//{
+//    closed = {}
+//    closed[pos] = 1
+//
+//    expand = {}
+//    action = {}
+//
+//    x = pos[0]
+//    y = pos[1]
+//    g = 0
+//    h = calc_goal_area_heuristic(current_goal_area, pos)
+//    f = g + h
+//
+//    open = []
+//    heappush(open, (f, g, h, x, y, angle))
+//
+//    found = False  # flag that is set when search is complete
+//    resign = False # flag set if we can't find expand
+//    count = 0
+//
+//    found_goal = None
+//
+//    while not found and not resign:
+//        if len(open) == 0:
+//            resign = True
+//            return None
+//        else:
+//            next = heappop(open)
+//
+//            x = next[3]
+//            y = next[4]
+//            a = next[5]
+//            g = next[1]
+//            expand[(x,y)] = count
+//            count += 1
+//
+//            if is_search_goal(grid, current_goal_area, (x, y)):
+//                found = True
+//                found_goal = (x, y)
+//            else:
+//                neighs = get_neighbour_pos((x,y), a)
+//                #expand winning node
+//                for i in range(4):
+//                    x2 = neighs[i][0]
+//                    y2 = neighs[i][1]
+//                    a2 = (a + i * (math.pi / 2)) % (2*math.pi)
+//                    if x2 > 0  and y2 > 0: #there're always borders on 0,0 coords
+//                        if (x2,y2) not in closed and path_can_enter(grid, (x2,y2)):
+//                            g2 = g + get_planned_cost(grid, (x, y), i, (x2, y2))
+//                            h2 = calc_goal_area_heuristic(current_goal_area, (x2,y2))
+//                            f2 = g2+h2
+//                            heappush(open, (f2, g2, h2, x2, y2, a2))
+//                            closed[(x2,y2)] = 1
+//                            action[(x2,y2)] = i, (x, y)
+//
+//    return actions_to_path(pos, found_goal, action)
+//}
+
+
+enum Cmds
+{
+    CMD_JEDZ_PRZOD = 1,
+    CMD_OBROT_LEWO,
+    CMD_OBROT_PRAWO,
+    CMD_ZAKONCZ_PRZEJAZD,
+    CMD_WYMYSL_RUCHY
+};
+
+Queue_int polecenia;
+
+void wymyslRuchy()
+{
+     debug( "wymyslRuchy");
+    queue_int_makeEmpty(polecenia);
+    queue_int_put(polecenia, CMD_ZAKONCZ_PRZEJAZD);
+}
+
+// ruch o jedno pole
+void jedzPrzod()
+{
+     OnRevSync(MOVE_MOTORS, 50, 0);
+     Wait(2000);
+     Off(MOVE_MOTORS);
+}
+
+void obrotLewo()
+{
+}
+
+void obrotPrawo()
+{
+}
+
+void zakonczPrzejazd()
+{
+     PlaySound(SOUND_DOUBLE_BEEP);
+     abort();
+}
+
+task main()
+{
+  queue_int_init(polecenia, 100);
+  while(true)
+  {
+    wymyslRuchy();
+    while(!queue_int_empty(polecenia))
+    {
+       Cmds polecenie = queue_int_front(polecenia);
+       queue_int_pop(polecenia);
+       switch(polecenie)
+       {
+           case CMD_JEDZ_PRZOD: jedzPrzod(); break;
+           case CMD_OBROT_LEWO: obrotLewo(); break;
+           case CMD_OBROT_PRAWO: obrotPrawo(); break;
+           case CMD_ZAKONCZ_PRZEJAZD: zakonczPrzejazd(); break;
+           case CMD_WYMYSL_RUCHY: wymyslRuchy();  break;
+           default:
+                  blad("NIEPRAWIDLOWA OBSLUGA KOMENDY");
+
+       }
+     }
+
+   }
+}
