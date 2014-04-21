@@ -11,8 +11,8 @@ int main(int argc, char *argv[])
 
     QList<QObject*> dataList;
     dataList.append(new WiezaModel("blue", 0, 0));
-    dataList.append(new WiezaModel("blue", 1, 1));
-    dataList.append(new WiezaModel("blue", 2, 2));
+    dataList.append(new WiezaModel("blue", 1, 0));
+    dataList.append(new WiezaModel("blue", 2, 0));
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:///main.qml")));
