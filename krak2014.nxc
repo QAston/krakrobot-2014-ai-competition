@@ -21,7 +21,6 @@ QUEUE(int)
 #include "vector.nxc"
 VECTOR(int)
 #include "heap.nxc"
-HEAP(int)
 
 void blad(string tekst1, string tekst2="", string tekst3="")
 {
@@ -40,86 +39,225 @@ enum WiezaTyp
     WIEZA_BIALA
 };
 
+#define NORTH 0
+#define SOUTH 1
+#define EAST 2
+#define WEST 3
+
+enum RelativeDirection
+{
+    FRONT = 0,
+    LEFT,
+    RIGHT,
+    BACK
+};
+
+struct Position
+{
+   int x;
+   int y;
+};
+
+bool position_equals(const Position a, const Position b)
+{
+    return (a.x == b.x && a.y == b.y);
+}
+                                  // global orientation  rel of which to calc
+int relativeAsGlobal[4][4] =
+{
+// north
+ {NORTH,  WEST, EAST, SOUTH},
+ // south
+ {SOUTH,  EAST, WEST, NORTH},
+ // east
+ {EAST,  NORTH, SOUTH, WEST},
+// west
+ {WEST,  SOUTH, NORTH, EAST},
+};
+
+bool position_isValid(Position& pos)
+{
+    return !(pos.x < 0 || pos.x >= PLANSZA_ROZMIAR || pos.y < 0 || pos.y >= PLANSZA_ROZMIAR);
+}
+
+// polnoc-polodnie - Y - druga wspolrzedna
+// wschod zachod - X - pierwsza wspolrzedna
+Position position_getNeighbour(Position& pos, int globalDirection)
+{
+    Position ret;
+    switch(globalDirection)
+    {
+       case NORTH:
+          ret.x = pos.x;
+          ret.y = pos.y - 1;
+       break;
+       case SOUTH:
+          ret.x = pos.x;
+          ret.y = pos.y + 1;
+       break;
+       case EAST:
+          ret.x = pos.x + 1;
+          ret.y = pos.y;
+       break;
+       case WEST:
+          ret.x = pos.x - 1;
+          ret.y = pos.y;
+       break;
+    }
+}
+
+
+
 struct Pole
 {
     bool znane;
     WiezaTyp wieza;
 };
 
-// poczatek ukladu jest w punkcie koncowym
-int pozycjaX = 4;
-int pozycjaY = 4;
-bool wracamy = false;
-Pole plansza[PLANSZA_ROZMIAR][PLANSZA_ROZMIAR];
-// do astara
-int calcHeurystyka(int x, int y, int powrot)
+bool pole_canEnter(const Pole  pole)
 {
-    if (powrot)
-       return 8 - x - y;
-    return x + y;
+   return !pole.znane || pole.wieza == WIEZA_BRAK;
 }
 
+void getNeighbours(Position& pos, int orientation, Position& outNeighbours[])
+{
+    for (int i = 0; i < 4; ++i)
+    {
+      outNeighbours[i] = position_getNeighbour(pos, relativeAsGlobal[orientation][i]);
+    }
+}
+Pole plansza[PLANSZA_ROZMIAR][PLANSZA_ROZMIAR];
 
+int calcHeurystyka(Position pos, int powrot)
+{
+    if (powrot)
+       return 8 - pos.x - pos.y;
+    return pos.x + pos.y;
+}
 
-//void search(pos, angle, current_goal_area, grid)
-//{
-//    closed = {}
-//    closed[pos] = 1
-//
-//    expand = {}
-//    action = {}
-//
-//    x = pos[0]
-//    y = pos[1]
-//    g = 0
-//    h = calc_goal_area_heuristic(current_goal_area, pos)
-//    f = g + h
-//
-//    open = []
-//    heappush(open, (f, g, h, x, y, angle))
-//
-//    found = False  # flag that is set when search is complete
-//    resign = False # flag set if we can't find expand
-//    count = 0
-//
-//    found_goal = None
-//
-//    while not found and not resign:
-//        if len(open) == 0:
-//            resign = True
-//            return None
-//        else:
-//            next = heappop(open)
-//
-//            x = next[3]
-//            y = next[4]
-//            a = next[5]
-//            g = next[1]
-//            expand[(x,y)] = count
-//            count += 1
-//
-//            if is_search_goal(grid, current_goal_area, (x, y)):
-//                found = True
-//                found_goal = (x, y)
-//            else:
-//                neighs = get_neighbour_pos((x,y), a)
-//                #expand winning node
-//                for i in range(4):
-//                    x2 = neighs[i][0]
-//                    y2 = neighs[i][1]
-//                    a2 = (a + i * (math.pi / 2)) % (2*math.pi)
-//                    if x2 > 0  and y2 > 0: #there're always borders on 0,0 coords
-//                        if (x2,y2) not in closed and path_can_enter(grid, (x2,y2)):
-//                            g2 = g + get_planned_cost(grid, (x, y), i, (x2, y2))
-//                            h2 = calc_goal_area_heuristic(current_goal_area, (x2,y2))
-//                            f2 = g2+h2
-//                            heappush(open, (f2, g2, h2, x2, y2, a2))
-//                            closed[(x2,y2)] = 1
-//                            action[(x2,y2)] = i, (x, y)
-//
-//    return actions_to_path(pos, found_goal, action)
-//}
+int kosztRuchu[] = {1, 2, 2, 3};
 
+int calcKoszt(int kierunekWzgledny)
+{
+    return kosztRuchu[kierunekWzgledny];
+}
+
+bool isGoal(Position pos, int powrot)
+{
+    if (powrot)
+        return pos.x == 4 && pos.y == 4;
+    return pos.x == 0 && pos.y == 0;
+}
+
+Position getGoal(int powrot)
+{
+     Position p;
+    if (powrot)
+    {
+      p.x = p.y = 4;
+    }
+    else
+      p.x = p.y = 0;
+
+    return p;
+}
+
+struct AstarNode
+{
+   Position pos;
+   int orientation;
+   int g;
+   int f;
+};
+
+bool minNode(AstarNode a, AstarNode b)
+{
+    return a.f < b.f || (a.f == b.f && a.g < b.g);
+}
+
+VECTOR(AstarNode)
+HEAP(AstarNode, minNode)
+
+struct AstarField
+{
+   bool visited;
+   Position fromWhere;
+   int moveOrientation;
+};
+
+void search(Position& pos, int orientation, bool czyPowrot, Pole grid[][], Stos_int outKierunkiRuchu)
+{
+    AstarField fields[PLANSZA_ROZMIAR][PLANSZA_ROZMIAR];
+    for(int i = 0; i < PLANSZA_ROZMIAR; ++i)
+        for(int j = 0; j < PLANSZA_ROZMIAR; ++j)
+        {
+            fields[i][j].visited = false;
+        }
+
+    bool found = false;
+    bool resign = false;
+    
+    Vector_AstarNode open;
+    vector_AstarNode_init(open, PLANSZA_ROZMIAR*PLANSZA_ROZMIAR);
+    
+    AstarNode current;
+    current.pos = pos;
+    current.orientation = orientation;
+    current.g = 0;
+    current.f = current.g + calcHeurystyka(pos, czyPowrot);
+    
+    heap_AstarNode_minNode_insert(open, current);
+    
+    AstarNode next;
+
+    while (!found && !resign)
+    {
+        if (open.size == 0)
+        {
+            resign = 1;
+            return;
+        }
+        else
+        {
+            current = heap_AstarNode_minNode_removeMin(open);
+
+            if (isGoal(current.pos, czyPowrot))
+            {
+                found = 1;
+            }
+            else
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    next.orientation = relativeAsGlobal[current.orientation][i];
+                    next.pos = position_getNeighbour(pos, next.orientation);
+                    if (position_isValid(next.pos))
+                    {
+                        if (!fields[next.pos.x][next.pos.y].visited && pole_canEnter(plansza[next.pos.x][next.pos.y]))
+                        {
+                            next.g = current.g + calcKoszt(i);
+                            next.f = current.g + calcHeurystyka(pos, czyPowrot);
+                            heap_AstarNode_minNode_insert(open, next);
+                            fields[next.pos.x][next.pos.y].visited = true;
+                            fields[next.pos.x][next.pos.y].fromWhere = current.pos;
+                            fields[next.pos.x][next.pos.y].moveOrientation = i;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    Position goal = getGoal(czyPowrot);
+    AstarField field;
+
+    while (!position_equals(goal, pos))
+    {
+        field = fields[next.pos.x][next.pos.y];
+        stos_int_push(outKierunkiRuchu, field.moveOrientation);
+        goal = field.fromWhere;
+    }
+}
 
 enum Cmds
 {
@@ -134,8 +272,11 @@ Queue_int polecenia;
 
 void wymyslRuchy()
 {
-     debug( "wymyslRuchy");
     queue_int_makeEmpty(polecenia);
+    Stos_int kierunkiRuchu;
+    stos_int_init(kierunkiRuchu, 100);
+
+    
     queue_int_put(polecenia, CMD_ZAKONCZ_PRZEJAZD);
 }
 

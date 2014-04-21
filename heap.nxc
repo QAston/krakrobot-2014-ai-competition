@@ -1,21 +1,21 @@
-#define HEAP(TYPE) \
+#define HEAP(TYPE, FUNC) \
                     \
-int heap_##TYPE##_minimum(int a, int indexa, int b, int indexb) {                   \
-    if (a < b)                                                                       \
+int heap_##TYPE##_##FUNC##_minimum(TYPE a, int indexa, TYPE b, int indexb) {                   \
+    if (FUNC(a, b))                                                                       \
         return indexa;                                                                \
                                                                                        \
     else                                                                                \
         return indexb;                                                                   \
 } \
-void heap_##TYPE##_percolateDown(Vector_##TYPE& h, int index) {     \
+void heap_##TYPE##_##FUNC##_percolateDown(Vector_##TYPE& h, int index) {     \
                                                                     \
     while(true)                                                     \
     {                                                                \
         if ((2*index+1) <= h.size) {                                    \
                                                                                      \
-            int min = heap_##TYPE##_minimum(h.data[2*index - 1], 2*index - 1, h.data[2*index], 2*index) + 1; \
+            int min = heap_##TYPE##_##FUNC##_minimum(h.data[2*index - 1], 2*index - 1, h.data[2*index], 2*index) + 1; \
                                                                                               \
-            if (h.data[index - 1] > h.data[min - 1]) {                                         \
+            if (FUNC(h.data[min - 1], h.data[index - 1])) {                                         \
                 vector_##TYPE##_swap(h, index - 1, min - 1);                                    \
                                                                                                  \
                 index = min;                                                                      \
@@ -24,42 +24,42 @@ void heap_##TYPE##_percolateDown(Vector_##TYPE& h, int index) {     \
         }                                                                                             \
                                                                                                        \
         else if (h.size == 2*index) {                                                                       \
-            if (h.data[index - 1] > h.data[2*index - 1])                                                 \
+            if (FUNC(h.data[2*index - 1], h.data[index - 1]))                                                 \
                 vector_##TYPE##_swap(h, index - 1, 2*index - 1);                                                          \
         }                                                                                                  \
         break;                                                                                              \
     }                                                                                                        \
 }        \
              \
-void heap_##TYPE##_make(Vector_##TYPE& h) { \
+void heap_##TYPE##_##FUNC##_make(Vector_##TYPE& h) { \
                                         \
     int i;                                 \
                                              \
     for (i=h.size/2; i>0; i--)                  \
-        heap_##TYPE##_percolateDown(h, i);       \
+        heap_##TYPE##_##FUNC##_percolateDown(h, i);       \
 }                                                  \
-void heap_##TYPE##_percolateUp(Vector_##TYPE& h, int index) {                                                   \
+void heap_##TYPE##_##FUNC##_percolateUp(Vector_##TYPE& h, int index) {                                                   \
                                                                                                                  \
     while(index > 1) {                                                                                            \
                                                                                                                    \
-        if (h.data[index/2 - 1] > h.data[index - 1]) {                                                               \
+        if (FUNC(h.data[index - 1], h.data[index/2 - 1])) {                                                               \
                                                                                                                       \
             vector_##TYPE##_swap(h, index - 1, index/2 - 1);                                                            \
         }                                                                                                                   \
          index = index / 2;                                                                                             \
     }                                                                                                                        \
 }                                                                                                                             \
-void heap_##TYPE##_insert(Vector_##TYPE& vec, TYPE value) {                                                                     \
+void heap_##TYPE##_##FUNC##_insert(Vector_##TYPE& vec, TYPE value) {                                                                     \
                                                                                                                                  \
     vector_##TYPE##_put(vec, value);                                                                                              \
-    heap_##TYPE##_percolateUp(vec, vec.size);                                                                                      \
+    heap_##TYPE##_##FUNC##_percolateUp(vec, vec.size);                                                                                      \
 }                \
                  \
                                                                                                                             \
                                                                                                                                    \
-TYPE heap_##TYPE##_removeMin(Vector_##TYPE& h, int def) {                                                                             \
+TYPE heap_##TYPE##_##FUNC##_removeMin(Vector_##TYPE& h) {                                                                             \
                                                                                                                                        \
-    int retval;                                                                                                                         \
+    TYPE retval;                                                                                                                         \
                                                                                                                                          \
     if (h.size > 0) {                                                                                                                     \
                                                                                                                                            \
@@ -69,12 +69,9 @@ TYPE heap_##TYPE##_removeMin(Vector_##TYPE& h, int def) {                       
                                                                          \
         h.size--;                                                         \
                                                                            \
-        heap_##TYPE##_percolateDown(h, 1);                                  \
-                                                                             \
-        return retval;                                                        \
+        heap_##TYPE##_##FUNC##_percolateDown(h, 1);                                  \
     }                                                                          \
-    else                                                                        \
-        return def;                                                              \
+    return retval;                                                        \
 }
 
 
