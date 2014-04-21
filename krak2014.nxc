@@ -5,11 +5,6 @@
 
 #define PLANSZA_ROZMIAR 5
 
-#include "stos.nxc"
-STOS(int)
-#include "kolejka.nxc"
-QUEUE(int)
-
 int debugIndex = 0;
 void debug(string text)
 {
@@ -18,6 +13,15 @@ void debug(string text)
      debugIndex+=8;
      debugIndex %= LCD_LINE1;
 }
+
+#include "stos.nxc"
+STOS(int)
+#include "kolejka.nxc"
+QUEUE(int)
+#include "vector.nxc"
+VECTOR(int)
+#include "heap.nxc"
+HEAP(int)
 
 void blad(string tekst1, string tekst2="", string tekst3="")
 {

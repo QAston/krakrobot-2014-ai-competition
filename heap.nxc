@@ -1,6 +1,3 @@
-#include "vector.nxc"
-VECTOR(int)
-
 #define HEAP(TYPE) \
                     \
 int heap_##TYPE##_minimum(int a, int indexa, int b, int indexb) {                   \
@@ -24,10 +21,9 @@ void heap_##TYPE##_percolateDown(Vector_##TYPE& h, int index) {     \
                 index = min;                                                                      \
                 continue;                                                                          \
             }                                                                                       \
-            break;                                                                                   \
         }                                                                                             \
                                                                                                        \
-        if (h.size == 2*index) {                                                                       \
+        else if (h.size == 2*index) {                                                                       \
             if (h.data[index - 1] > h.data[2*index - 1])                                                 \
                 vector_##TYPE##_swap(h, index - 1, 2*index - 1);                                                          \
         }                                                                                                  \
@@ -49,9 +45,8 @@ void heap_##TYPE##_percolateUp(Vector_##TYPE& h, int index) {                   
         if (h.data[index/2 - 1] > h.data[index - 1]) {                                                               \
                                                                                                                       \
             vector_##TYPE##_swap(h, index - 1, index/2 - 1);                                                            \
-                                                                                                                         \
-            index = index / 2;                                                                                             \
         }                                                                                                                   \
+         index = index / 2;                                                                                             \
     }                                                                                                                        \
 }                                                                                                                             \
 void heap_##TYPE##_insert(Vector_##TYPE& vec, TYPE value) {                                                                     \
@@ -84,12 +79,13 @@ TYPE heap_##TYPE##_removeMin(Vector_##TYPE& h, int def) {                       
 
 
 
-Vector_int v;
-HEAP(int);
+//Vector_int v;
+//HEAP(int);
+//
+//task main()
+//{
+//   vector_int_init(v, 10);
+//   heap_int_make(v);
+//}
 
-task main()
-{
-   vector_int_init(v, 10);
-   heap_int_make(v);
-}
 
