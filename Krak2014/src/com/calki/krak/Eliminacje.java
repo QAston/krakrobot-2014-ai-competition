@@ -165,29 +165,26 @@ public class Eliminacje {
 	}
 	
 	public static void jedzPoSpiraliProste() throws InterruptedException{
-		pilot.travel(32);
-		pilot.rotate(-90);
-		pilot.travel(32);
-		pilot.travel(32);
-		pilot.rotate(-45);
-		pilot.travel(45);
-		pilot.rotate(-45);
-		pilot.travel(32);
-		pilot.travel(32);
-		pilot.rotate(-45);
-		pilot.travel(45);
-		pilot.rotate(-45);
-		pilot.travel(32);
-		pilot.travel(32);
-		pilot.rotate(-45);
-		pilot.travel(45);
-		pilot.rotate(-45);
-		pilot.travel(32);
-		pilot.rotate(-45);
-		pilot.travel(45);
-		pilot.rotate(-45);
-		pilot.travel(45);
-		pilot.rotate(-45);
+		pilot.setTravelSpeed(32);
+		pilot.setAcceleration(19);
+		pilot.setRotateSpeed(60);
+		pilot.travel(130);
+		pilot.rotate(83);
+		pilot.travel(130);
+		pilot.rotate(83);
+		pilot.travel(130);
+		pilot.rotate(83);
+		pilot.travel(100);
+		pilot.rotate(83);
+		pilot.travel(100);
+		pilot.rotate(83);
+		pilot.travel(70);
+		pilot.rotate(83);
+		pilot.travel(70);
+		pilot.rotate(83);
+		pilot.travel(35);
+		pilot.rotate(83);
+		pilot.travel(30);
 		Sound.twoBeeps();
 	}
 	
