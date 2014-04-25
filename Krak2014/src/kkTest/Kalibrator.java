@@ -1,5 +1,6 @@
 package kkTest;
 
+import lejos.nxt.Battery;
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.LCD;
@@ -15,7 +16,7 @@ public class Kalibrator {
 		 pilot.forward();
 		 Button.waitForAnyPress();*/
 		 
-		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.18d,19.2d,Motor.C,Motor.A,true);
+		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.1d,18.3d,Motor.C,Motor.A,true);//dla voltage 8.57
 	     OdometryPoseProvider opp = new OdometryPoseProvider(pilot);
 	     ColorSensor kolor = new ColorSensor(SensorPort.S4);
 	    
@@ -24,12 +25,28 @@ public class Kalibrator {
 	     pilot.setRotateSpeed(35);
 	     
 	     
-	     Pose OldPose = opp.getPose();
-	     Pose NewPose;
-	     
-	    LCD.drawInt(kolor.getColorID(),0, 0);
-	    Button.waitForAnyPress();
-	   
+	     Pose pose = opp.getPose();
+	     System.out.print(Battery.getVoltage());
+	     LCD.drawString(Double.toString(pose.getLocation().getX()), 0, 1);
+	     LCD.drawString(Double.toString(pose.getLocation().getY()), 0, 2);
+	     LCD.drawString(Float.toString(pose.getHeading()), 0, 3);
+	     pilot.travel(32);
+	     pose = opp.getPose();
+	     pilot.travel(32);
+	     pose = opp.getPose();
+	     pilot.travel(32);
+	     pose = opp.getPose();
+	     pilot.rotate(90);
+	     pose = opp.getPose();
+	     pilot.travel(32);
+	     pose = opp.getPose();
+	     pilot.rotate(90);
+	     pose = opp.getPose();
+	     pilot.travel(32);
+	     pose = opp.getPose();
+	     LCD.drawString(Double.toString(pose.getLocation().getX()), 0, 4);
+	     LCD.drawString(Double.toString(pose.getLocation().getY()), 0, 5);
+	     LCD.drawString(Float.toString(pose.getHeading()), 0, 6);
 	     
 	     //pilot.rotate((double)diff);
 	     /*LCD.drawString(Double.toString(pose.getLocation().getX()), 0, 0);
