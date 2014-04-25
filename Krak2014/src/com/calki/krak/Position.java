@@ -19,10 +19,10 @@ public class Position {
 	{
 		return this.x >= 0 && this.x < Mapa.ROZMIAR_MAPY && this.y >= 0 && this.y < Mapa.ROZMIAR_MAPY;
 	}
-	/*
+	
 	Position getNeighbour(GlobalDirection globalDirection)
 	{
-	    Position ret;
+	    Position ret = new Position(0,0);
 	    switch(globalDirection)
 	    {
 	       case NORTH:
@@ -42,5 +42,6 @@ public class Position {
 	          ret.y = this.y;
 	       break;
 	    }
-	}*/
+	    return ret; 
+	}
 }
