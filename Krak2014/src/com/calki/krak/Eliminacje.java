@@ -13,15 +13,16 @@ import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.navigation.Pose;
 
 public class Eliminacje {
-	public static DifferentialPilot pilot;
+	/*
 	public static UltrasonicSensor ultraSensor;
 	public static ColorSensor colorSensor;
-	public static TouchSensor touchSensor;
+	public static TouchSensor touchSensor;*/
 	
+	public static DifferentialPilot pilot;
 	public static OdometryPoseProvider opp;
 	public static Pose pose;
 	
-	public static int BIALY = 6;
+	/*public static int BIALY = 6;
 	public static int NIEBIESKI = 2;
 	public static int CZARNY = 7;
 	
@@ -81,13 +82,7 @@ public class Eliminacje {
 		}
 	}
 	
-	public static void kolorOpusc(){
-		Motor.B.rotate(-110);
-	}
 	
-	public static void kolorPodnies(){
-		Motor.B.rotate(110);
-	}
 	
 	public static void jedzDoWiezy(boolean czyWrocic) throws InterruptedException{
 		int dotykStatus=0;
@@ -163,47 +158,70 @@ public class Eliminacje {
 			jedzDoWiezy(true);
 		}
 	}
+	*/
+	public static void kolorOpusc(){
+		Motor.B.rotate(-110);
+	}
 	
+	public static void kolorPodnies(){
+		Motor.B.rotate(110);
+	}
 	public static void jedzPoSpiraliProste() throws InterruptedException{
 		pilot.setTravelSpeed(32);
 		pilot.setAcceleration(19);
 		pilot.setRotateSpeed(60);
 		pilot.travel(130);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(130);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(130);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(100);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(100);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(70);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(70);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(35);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(30);
 		Sound.twoBeeps();
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		pilot = new DifferentialPilot(8.3d,8.18d,19.2d,Motor.C,Motor.A,true);	  
-		opp = new OdometryPoseProvider(pilot);
-		ultraSensor = new UltrasonicSensor(SensorPort.S1);
-		colorSensor = new ColorSensor(SensorPort.S4);
-		touchSensor = new TouchSensor(SensorPort.S2);
+		//opp = new OdometryPoseProvider(pilot);
+		//ultraSensor = new UltrasonicSensor(SensorPort.S1);
+		//colorSensor = new ColorSensor(SensorPort.S4);
+		//touchSensor = new TouchSensor(SensorPort.S2);
 		pilot.setTravelSpeed(15);
 	    pilot.setRotateSpeed(45);
-	    int i,j;
+	    /*int i,j;
 	    for(i=0;i<=4;i++){
 	    	for(j=0;j<=4;j++){
 	    		mapa[i][j]=0;
 	    	}
 	    }
 	    pose = opp.getPose();
-	    
+	    */
 	    //jedzDoPrzodu(32);
 	    
 	    jedzPoSpiraliProste();
@@ -211,7 +229,7 @@ public class Eliminacje {
 		//wiezaZbierzObrot();
 		//lcdPokazMape();
 		
-	    lcdPokazOdleglosc();
+	    //lcdPokazOdleglosc();
 	    //lcdPokazColorId();
 	}
 
