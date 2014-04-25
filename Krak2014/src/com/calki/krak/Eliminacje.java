@@ -121,11 +121,11 @@ public class Eliminacje {
 		pilot.setTravelSpeed(15);
 	    pilot.setRotateSpeed(45);
 	    mapa = new int[][]{
-	    		  { 0, 0, 0, 0 },
-	    		  { 0, 0, 0, 0 },
-	    		  { 0, 0, 0, 0 },
-	    		  { 0, 0, 0, 0 },
-	    		  { 0, 0, 0, 0 }
+	    		  { 0, 0, 0, 0, 0 },
+	    		  { 0, 0, 0, 0, 0 },
+	    		  { 0, 0, 0, 0, 0 },
+	    		  { 0, 0, 0, 0, 0 },
+	    		  { 0, 0, 0, 0, 0 }
 	    		};
 	    pose = opp.getPose();
 	    
