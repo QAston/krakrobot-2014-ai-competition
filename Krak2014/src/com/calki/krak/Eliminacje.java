@@ -108,13 +108,13 @@ public class Eliminacje {
 					
 					if(colorSensor.getColorID()==NIEBIESKI){
 						Sound.beep();
-						pose = opp.getPose();
+						//pose = opp.getPose();
 						mapaUstawWieze(NIEBIESKI);
 						pilot.rotate(-pilot.getAngleIncrement());
 						break;
 					}else if(colorSensor.getColorID()==BIALY){
 						Sound.twoBeeps();
-						pose = opp.getPose();
+						//pose = opp.getPose();
 						mapaUstawWieze(BIALY);
 						pilot.rotate(-pilot.getAngleIncrement());
 						break;
@@ -141,7 +141,9 @@ public class Eliminacje {
 	}
 	
 	public static void mapaUstawWieze(int typWiezy){	
-		mapa[(int)(opp.getPose().getX()) / 32][4 - (int)(opp.getPose().getY()) / 32]=typWiezy;
+		posX=(int)(opp.getPose().getX()) / 29;
+		posY=4 - (int)(opp.getPose().getY()) / 29;
+		mapa[posX][posY]=typWiezy;
 	}
 	
 	public static void szukajWiezy() throws InterruptedException{
@@ -153,6 +155,40 @@ public class Eliminacje {
 	public static void wiezaZbierzObrot(){
 		pilot.travel(6);
 		pilot.rotate(360);
+	}
+	
+	public static void jedzDoPrzodu(int wartosc) throws InterruptedException{
+		pilot.travel(wartosc);
+		if(ultraSensor.getDistance()<=70){
+			jedzDoWiezy(true);
+		}
+	}
+	
+	public static void jedzPoSpiraliProste() throws InterruptedException{
+		pilot.travel(32);
+		pilot.rotate(-90);
+		pilot.travel(32);
+		pilot.travel(32);
+		pilot.rotate(-45);
+		pilot.travel(45);
+		pilot.rotate(-45);
+		pilot.travel(32);
+		pilot.travel(32);
+		pilot.rotate(-45);
+		pilot.travel(45);
+		pilot.rotate(-45);
+		pilot.travel(32);
+		pilot.travel(32);
+		pilot.rotate(-45);
+		pilot.travel(45);
+		pilot.rotate(-45);
+		pilot.travel(32);
+		pilot.rotate(-45);
+		pilot.travel(45);
+		pilot.rotate(-45);
+		pilot.travel(45);
+		pilot.rotate(-45);
+		Sound.twoBeeps();
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
@@ -171,11 +207,14 @@ public class Eliminacje {
 	    }
 	    pose = opp.getPose();
 	    
-		jedzDoWiezy(true);
+	    //jedzDoPrzodu(32);
+	    
+	    jedzPoSpiraliProste();
+		//jedzDoWiezy(true);
 		//wiezaZbierzObrot();
-		lcdPokazMape();
+		//lcdPokazMape();
 		
-	    //lcdPokazOdleglosc();
+	    lcdPokazOdleglosc();
 	    //lcdPokazColorId();
 	}
 
