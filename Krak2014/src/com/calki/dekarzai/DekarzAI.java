@@ -70,13 +70,13 @@ public class DekarzAI implements AI {
         Polecenie.JEDZ_PROSTO, 
         Polecenie.JEDZ_PROSTO, 
         Polecenie.JEDZ_W_LEWO,
-        Polecenie.ZAKONCZ_JAZDE};
+        Polecenie.ZAKONCZ_JAZDE};*/
 		Polecenie[] trasa = {Polecenie.JEDZ_PROSTO, 
         Polecenie.JEDZ_PROSTO,
         Polecenie.JEDZ_W_LEWO,
         Polecenie.JEDZ_W_PRAWO,
         Polecenie.JEDZ_W_LEWO,
-        Polecenie.ZAKONCZ_JAZDE};*/
+        Polecenie.ZAKONCZ_JAZDE};
 
 		Kierowca kierowca = 
 				new TrasowyKierowca(trasa, Kierunek.KIERUNEK_GORA, 
