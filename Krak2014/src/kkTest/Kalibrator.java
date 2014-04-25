@@ -16,7 +16,7 @@ public class Kalibrator {
 		 pilot.forward();
 		 Button.waitForAnyPress();*/
 		 
-		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.1d,18.3d,Motor.C,Motor.A,true);//dla voltage 8.57
+		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.1d,18.7d,Motor.C,Motor.A,true);//dla voltage 8.57
 	     OdometryPoseProvider opp = new OdometryPoseProvider(pilot);
 	     ColorSensor kolor = new ColorSensor(SensorPort.S4);
 	    
@@ -47,6 +47,13 @@ public class Kalibrator {
 	     LCD.drawString(Double.toString(pose.getLocation().getX()), 0, 4);
 	     LCD.drawString(Double.toString(pose.getLocation().getY()), 0, 5);
 	     LCD.drawString(Float.toString(pose.getHeading()), 0, 6);
+	     double pi = Math.atan2(pose.getLocation().getY(),pose.getLocation().getX());
+	     LCD.drawString(Double.toString(pi), 0, 7);
+	     while(pose.getHeading() != (float)pi){
+	    	 pilot.rotateLeft();
+	    	 pose = opp.getPose();
+	     }
+	     pilot.quickStop();
 	     
 	     //pilot.rotate((double)diff);
 	     /*LCD.drawString(Double.toString(pose.getLocation().getX()), 0, 0);
