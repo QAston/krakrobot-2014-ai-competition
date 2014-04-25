@@ -17,7 +17,7 @@ public class Kalibrator {
 		 
 		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.18d,19.2d,Motor.C,Motor.A,true);
 	     OdometryPoseProvider opp = new OdometryPoseProvider(pilot);
-	     ColorSensor kolor = new ColorSensor(SensorPort.S2);
+	     ColorSensor kolor = new ColorSensor(SensorPort.S4);
 	    
 	     
 	     pilot.setTravelSpeed(15);
@@ -27,14 +27,11 @@ public class Kalibrator {
 	     Pose OldPose = opp.getPose();
 	     Pose NewPose;
 	     
-	     while(kolor.getColorID() != 7){
-	    	 pilot.rotateRight();
-	     }
-	     NewPose = opp.getPose();
+	    LCD.drawInt(kolor.getColorID(),0, 0);
+	    Button.waitForAnyPress();
+	   
 	     
-	     float diff = OldPose.getHeading() - NewPose.getHeading();
-	     
-	     pilot.rotate((double)diff);
+	     //pilot.rotate((double)diff);
 	     /*LCD.drawString(Double.toString(pose.getLocation().getX()), 0, 0);
 	     LCD.drawString(Double.toString(pose.getLocation().getY()), 0, 1);
 	     LCD.drawString(Float.toString(pose.getHeading()), 0, 2);
