@@ -61,6 +61,26 @@ public class Eliminacje {
 			Button.waitForAnyPress();
 	}
 	
+	public static int mapGetDoubleTowers(){
+		int countNiebieski=0;
+		int countBialy=0;
+		int i,j;
+		for(i=0;i<=4;i++){
+			for(j=0;j<=4;j++){
+				if(mapa[i][j]==NIEBIESKI){
+					countNiebieski++;
+				}else if(mapa[i][j]==BIALY){
+					countBialy++;
+				}
+			}
+		}
+		if(countNiebieski>countBialy){
+			return NIEBIESKI;
+		}else{
+			return BIALY;
+		}
+	}
+	
 	public static void kolorOpusc(){
 		Motor.B.rotate(-110);
 	}
@@ -69,7 +89,7 @@ public class Eliminacje {
 		Motor.B.rotate(110);
 	}
 	
-	public static void jedzDoWiezy() throws InterruptedException{
+	public static void jedzDoWiezy(boolean czyWrocic) throws InterruptedException{
 		int dotykStatus=0;
 		while(ultraSensor.getDistance()>5){
 			if(touchSensor.isPressed()){
@@ -102,12 +122,18 @@ public class Eliminacje {
 					
 				}
 				if(dotykStatus==1){
-					pilot.travel(-7);
-					pilot.rotate(35);
+					pilot.travel(-5);
+					pilot.rotate(41);
 				}
 				pilot.stop();
 				pilot.setRotateSpeed(pamietajRotate);
 				kolorOpusc();
+				if(czyWrocic==true){
+					while(colorSensor.getColorID()!=CZARNY){
+						pilot.backward();
+					}
+					pilot.travel(-6);
+				}
 				break;
 			}
 		      pilot.forward();
@@ -120,8 +146,13 @@ public class Eliminacje {
 	
 	public static void szukajWiezy() throws InterruptedException{
 		if(ultraSensor.getDistance()>20 && ultraSensor.getDistance()<75){
-			jedzDoWiezy();
+			jedzDoWiezy(true);
 		}
+	}
+	
+	public static void wiezaZbierzObrot(){
+		pilot.travel(6);
+		pilot.rotate(360);
 	}
 	
 	public static void main(String[] args) throws InterruptedException {
@@ -140,8 +171,8 @@ public class Eliminacje {
 	    }
 	    pose = opp.getPose();
 	    
-	    Sound.beep();
-		jedzDoWiezy();
+		jedzDoWiezy(true);
+		//wiezaZbierzObrot();
 		lcdPokazMape();
 		
 	    //lcdPokazOdleglosc();
