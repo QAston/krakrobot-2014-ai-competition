@@ -13,12 +13,13 @@ public class Kalibrator {
 		 pilot.forward();
 		 Button.waitForAnyPress();*/
 		 
-		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.2d,18.5d,Motor.C,Motor.A,true);
+		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.18d,19.2d,Motor.C,Motor.A,true);
 	     OdometryPoseProvider opp = new OdometryPoseProvider(pilot);
 	     
 	     
 	     pilot.setTravelSpeed(15);
 	     pilot.setRotateSpeed(45);
+	     //pilot.setAcceleration(10);
 	     
 	     Pose pose = opp.getPose();
 	     
