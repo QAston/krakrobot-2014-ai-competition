@@ -2,32 +2,7 @@ package com.calki.krak;
 
 public class Nxc {
 
-	enum WiezaTyp
-	{
-	    WIEZA_BRAK,
-	    WIEZA_NIEBIESKA,
-	    WIEZA_BIALA
-	}
-
-	/*enum RelativeDirection
-	{
-	    FRONT = 0,
-	    LEFT,
-	    RIGHT,
-	    BACK
-	};
-	                                  // global orientation  rel of which to calc
-	char relativeAsGlobal[4][4] =
-	{
-	// north
-	 {NORTH,  WEST, EAST, SOUTH},
-	 // south
-	 {SOUTH,  EAST, WEST, NORTH},
-	 // east
-	 {EAST,  NORTH, SOUTH, WEST},
-	// west
-	 {WEST,  SOUTH, NORTH, EAST},
-	};
+	/*
 
 	struct Pole
 	{
