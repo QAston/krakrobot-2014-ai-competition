@@ -10,6 +10,6 @@ public class PositionProvider {
 	}
 	public Position getMapPosition()
 	{
-		return new Position(4 - (int)(pp.getPose().getX()) / 32, 4 - (int)(pp.getPose().getY()) / 32);
+		return new Position(4 - (int)(pp.getPose().getX()) / 32, 4 + (int)(pp.getPose().getY()) / 32);
 	}
 }

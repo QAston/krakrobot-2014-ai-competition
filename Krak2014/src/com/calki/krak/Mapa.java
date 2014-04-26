@@ -3,6 +3,27 @@ package com.calki.krak;
 import lejos.robotics.pathfinding.Node;
 
 public class Mapa {
+	
+	// uzywamy metryki taksówkowej
+	class TaxiNode extends Node
+	{
+
+		public TaxiNode(float x, float y) {
+			super(x, y);
+		}
+		
+		@Override
+		protected float calculateG(Node neighbor) {
+			
+			return Math.abs(this.x - neighbor.x) +  Math.abs(this.y - neighbor.y);
+		}
+		
+		@Override
+		protected float calculateH(Node goal) {
+			return Math.abs(this.x - goal.x) +  Math.abs(this.y - goal.y);
+		}
+		
+	}
 	public static final int ROZMIAR_MAPY = 5;
 	Node[] nodes;
 	
@@ -12,7 +33,7 @@ public class Mapa {
 		{
 			for(int j = 0; j < ROZMIAR_MAPY; ++j)
 			{
-				nodes[toIndex(i, j)] = new Node(i, j);
+				nodes[toIndex(i, j)] = new TaxiNode(i, j);
 			}
 		}
 		
