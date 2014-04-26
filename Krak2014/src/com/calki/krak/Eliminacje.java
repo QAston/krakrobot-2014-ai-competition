@@ -1,5 +1,7 @@
 package com.calki.krak;
 
+import java.util.ArrayList;
+
 import lejos.nxt.Button;
 import lejos.nxt.ColorSensor;
 import lejos.nxt.LCD;
@@ -13,11 +15,12 @@ import lejos.robotics.navigation.DifferentialPilot;
 import lejos.robotics.navigation.Pose;
 
 public class Eliminacje {
-	public static DifferentialPilot pilot;
+	
 	public static UltrasonicSensor ultraSensor;
 	public static ColorSensor colorSensor;
 	public static TouchSensor touchSensor;
 	
+	public static DifferentialPilot pilot;
 	public static OdometryPoseProvider opp;
 	public static Pose pose;
 	
@@ -27,6 +30,8 @@ public class Eliminacje {
 	
 	public static int posX = 0;
 	public static int posY = 0;
+	
+	public static ArrayList<EliminacjeRuch> listaRuchow;
 	
 	public static int mapa[][] = new int[5][5];
 	
@@ -38,7 +43,7 @@ public class Eliminacje {
 		      LCD.refresh();
 		   }
 	}
-	
+		
 	public static void lcdPokazColorId(){
 		while(true){
 			int value = colorSensor.getColorID();
@@ -81,13 +86,7 @@ public class Eliminacje {
 		}
 	}
 	
-	public static void kolorOpusc(){
-		Motor.B.rotate(-110);
-	}
 	
-	public static void kolorPodnies(){
-		Motor.B.rotate(110);
-	}
 	
 	public static void jedzDoWiezy(boolean czyWrocic) throws InterruptedException{
 		int dotykStatus=0;
@@ -164,54 +163,99 @@ public class Eliminacje {
 		}
 	}
 	
+	public static void kolorOpusc(){
+		Motor.B.rotate(-110);
+	}
+	
+	public static void kolorPodnies(){
+		Motor.B.rotate(110);
+	}
 	public static void jedzPoSpiraliProste() throws InterruptedException{
 		pilot.setTravelSpeed(32);
 		pilot.setAcceleration(19);
 		pilot.setRotateSpeed(60);
 		pilot.travel(130);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(130);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(130);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(100);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(100);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(70);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(70);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(35);
-		pilot.rotate(83);
+		kolorPodnies();
+		kolorOpusc();
+		pilot.rotate(-88);
 		pilot.travel(30);
 		Sound.twoBeeps();
 	}
 	
+	public static void setupRuchy(){
+		listaRuchow = new ArrayList<EliminacjeRuch>();
+		listaRuchow.add(new EliminacjeRuch(128,0));
+		listaRuchow.add(new EliminacjeRuch(128,128));
+		listaRuchow.add(new EliminacjeRuch(0,128));
+		listaRuchow.add(new EliminacjeRuch(0,32));
+		listaRuchow.add(new EliminacjeRuch(96,32));
+		listaRuchow.add(new EliminacjeRuch(96,96));
+		listaRuchow.add(new EliminacjeRuch(32,96));
+		listaRuchow.add(new EliminacjeRuch(32,64));
+		listaRuchow.add(new EliminacjeRuch(64,64));
+	}
+	
+	
 	public static void main(String[] args) throws InterruptedException {
 		pilot = new DifferentialPilot(8.3d,8.18d,19.2d,Motor.C,Motor.A,true);	  
-		opp = new OdometryPoseProvider(pilot);
-		ultraSensor = new UltrasonicSensor(SensorPort.S1);
-		colorSensor = new ColorSensor(SensorPort.S4);
-		touchSensor = new TouchSensor(SensorPort.S2);
+		//opp = new OdometryPoseProvider(pilot);
+		//ultraSensor = new UltrasonicSensor(SensorPort.S1);
+		//colorSensor = new ColorSensor(SensorPort.S4);
+		//touchSensor = new TouchSensor(SensorPort.S2);
+		setupRuchy();
 		pilot.setTravelSpeed(15);
 	    pilot.setRotateSpeed(45);
-	    int i,j;
+	    int i=0;
+	    int powrotRuch;
+	    while(listaRuchow.get(i)!=null){
+	    	
+	    }
+	    Sound.twoBeeps();
+	    
+	    /*int i,j;
 	    for(i=0;i<=4;i++){
 	    	for(j=0;j<=4;j++){
 	    		mapa[i][j]=0;
 	    	}
 	    }
 	    pose = opp.getPose();
-	    
+	    */
 	    //jedzDoPrzodu(32);
 	    
-	    jedzPoSpiraliProste();
+	    //jedzPoSpiraliProste();
 		//jedzDoWiezy(true);
 		//wiezaZbierzObrot();
 		//lcdPokazMape();
 		
-	    lcdPokazOdleglosc();
+	    //lcdPokazOdleglosc();
 	    //lcdPokazColorId();
 	}
 
