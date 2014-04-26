@@ -18,17 +18,24 @@ public class Kalibrator {
    	 double zm3 = Math.abs(newAngle-currAngle-2*Math.PI);
    	 return Math.min(zm1, Math.min(zm2, zm3));
     }
+    //---- obie funkcje przyjmuja wartoœci dodatnie, zarówno dla x jak i y --//
     //zwraca wartoœæ o jak¹ ma obróciæ siê robot aby staæ przodem do docelowych wspó³rzênych x,y
-    public static double goToPoint(Pose actualPose, double destX, double destY){
-    	double newAngle = (Math.atan2(actualPose.getLocation().getY()-destY,actualPose.getLocation().getX()-destX));
-    	return Math.toDegrees(angleDiff(Math.toRadians(actualPose.getHeading()), newAngle));
-    }
+    public static double setDirection(Pose actualPose, double destX, double destY){
+    	double newAngle = (Math.atan2(actualPose.getLocation().getY()-destY,actualPose.getLocation().getX()+destX));
+    	return -(Math.toDegrees(angleDiff(Math.toRadians(actualPose.getHeading()), newAngle)));
+    }//u¿ycie:
+    // pilot.rotate(setDirection(pose, 128.0d,128.0d); -> podaje mu aktualna pozycjê oraz punkt w którego strone ma sie obórcic
+    
+    public static double setDistanceToPoint(Pose actualPose, double destX, double destY){
+    	destX = -destX;
+    	double d = Math.sqrt((Math.pow((destX - actualPose.getLocation().getX()),2.0d)+(Math.pow((destY - actualPose.getLocation().getY()), 2.0d))));
+    	LCD.drawString(Double.toString(d), 0, 1);
+    	return d;
+    }//u¿ycie: 
+    // pose = opp.getPose() -> pobieram aktualn¹ pozycjê uwzglêdniajaca ewentualne zmiany podczas obrotu
+    // pilot.travel(setDistanceToPoint(pose, 128.0d, 128.0d)); -> podaje mu aktualna pozycjê Pose, oraz punkt do którego ma pojechaæ
     
 	 public static void main(String[] args){
-		 /*DifferentialPilot pilot = new DifferentialPilot(8.3f,2.0f,2.5f,Motor.C,Motor.A,true);
-		 pilot.setTravelSpeed(45.0f);
-		 pilot.forward();
-		 Button.waitForAnyPress();*/
 		 
 		 DifferentialPilot pilot = new DifferentialPilot(8.3d,8.14d,18.6d,Motor.C,Motor.A,true);//dla voltage 8.17
 	     OdometryPoseProvider opp = new OdometryPoseProvider(pilot);
@@ -45,7 +52,7 @@ public class Kalibrator {
 	     /*pilot.travel(32);
 	     pose = opp.getPose();
 	     pilot.travel(32);
-	     pose = opp.getPose();*/
+	     pose = opp.getPose();
 	     pilot.travel(32);
 	     pose = opp.getPose();
 	     pilot.rotate(90);
@@ -70,7 +77,9 @@ public class Kalibrator {
 	     }
 	     pilot.quickStop();*/
 	     //pilot.rotate(Math.toDegrees(angleDiff(Math.toRadians(pose.getHeading()), newAngle)));
-	     pilot.rotate(goToPoint(pose, 0d, 0d));
+	     pilot.rotate(setDirection(pose, 128d, 128.0d));
+	     pose = opp.getPose();
+	     pilot.travel(setDistanceToPoint(pose, 128.0d, 128.0d));
 
 	     
 	     //pilot.rotate((double)diff);
