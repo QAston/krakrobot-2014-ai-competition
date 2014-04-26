@@ -253,11 +253,23 @@ public class Eliminacje {
 	public static void sprawdzListeWiez(){
 		int i;
 		
-		if(countNiebieskie==2 || countBiale==2){
+		if(countNiebieskie==2 ){
 			listaRuchow.clear();
 			for(i=0;i<listaWiez.size();i++){
 				EliminacjeWieza aktualnaWieza = listaWiez.get(i);
 				if(aktualnaWieza.getKolor()==BIALY){
+					listaRuchow.add(new EliminacjeRuch(aktualnaWieza.getPozycjaX(), aktualnaWieza.getPozycjaY()));
+					listaRuchow.add(new EliminacjeRuch(0, 0));
+				}else{
+					listaRuchow.add(new EliminacjeRuch(aktualnaWieza.getPozycjaX(), aktualnaWieza.getPozycjaY()));
+					listaRuchow.add(new EliminacjeRuch(64, 64));
+				}
+			}
+		}else if(countBiale==2){
+			listaRuchow.clear();
+			for(i=0;i<listaWiez.size();i++){
+				EliminacjeWieza aktualnaWieza = listaWiez.get(i);
+				if(aktualnaWieza.getKolor()==NIEBIESKI){
 					listaRuchow.add(new EliminacjeRuch(aktualnaWieza.getPozycjaX(), aktualnaWieza.getPozycjaY()));
 					listaRuchow.add(new EliminacjeRuch(0, 0));
 				}else{
