@@ -1,0 +1,67 @@
+#SYMBOLS
+Index	Identifier	Type	Flag	Data	Size	RefCount
+0	__D0main	6	1	0	4	6
+1	__Wait_7qG2_ms_7qG2_000_inline_main	5	1	4	4	4
+2	____initialize_global_data_return	1	1	8	1	3
+3	__constVal63	2	0	9	1	4
+4	__constVal96	2	0	10	1	4
+5	__constVal2	2	0	11	1	1
+6	__constVal32	2	0	12	1	12
+7	__OnRev_Tmp	2	1	13	1	2
+8	__constVal3	2	0	14	1	4
+9	__constVal0	2	1	15	1	14
+10	__OUT_AC	7	0	16	4	2
+11	__OUT_AC.__OUT_AC_type	1	0	0	1	0
+#SOURCES
+Clump	Line	PC	Source
+0	2	0	#line 2 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	3	0		subcall __initialize_global_data, ____initialize_global_data_return
+0	2	2	#line 2 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	2	2	#line 2 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	3	2		set __D0main, 90
+0	3	5	#line 3 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	4	5	#pragma macro 7
+0	4	5		setout __OUT_AC, 2, __D0main, 1, __constVal3, 8, __constVal0, 6, __constVal32, 7, __constVal0, 5, __constVal0, 10, __constVal96, 11, __constVal32, 12, __constVal32, 0, __constVal63
+0	5803	28	#line 5803 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	3	28	#line 3 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	3	28	#line 3 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	4	28		set __Wait_7qG2_ms_7qG2_000_inline_main, 3200
+0	3	31	#line 3 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	8551	31	#line 8551 "NXCDefs.h"
+0	8552	31		waitv __Wait_7qG2_ms_7qG2_000_inline_main
+0	8551	33	#line 8551 "NXCDefs.h"
+0	4	33	#line 4 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	5	33	#line 5 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	6	33	#pragma macro 7
+0	6	33		setout __OUT_AC, 2, __constVal0, 1, __constVal3, 8, __constVal0, 6, __constVal32, 7, __constVal0, 5, __constVal0, 10, __constVal96, 11, __constVal32, 12, __constVal32, 0, __constVal63
+0	5818	56	#line 5818 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	5	56	#line 5 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	5	56	#line 5 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	6	56		set __D0main, 90
+0	6	59	#line 6 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	7	59	#pragma macro 7
+0	7	59		setout __constVal0, 2, __D0main, 1, __constVal3, 8, __constVal0, 6, __constVal32, 7, __constVal0, 5, __constVal0, 10, __constVal96, 11, __constVal32, 12, __constVal32, 0, __constVal63
+0	5823	82	#line 5823 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	6	82	#line 6 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	6	82	#line 6 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	7	82		set __D0main, 90
+0	7	85	#line 7 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	8	85	#pragma macro 10
+0	8	85		neg __OnRev_Tmp, __D0main
+0	8	88		setout __constVal2, 2, __OnRev_Tmp, 1, __constVal3, 8, __constVal0, 6, __constVal32, 7, __constVal0, 5, __constVal0, 10, __constVal96, 11, __constVal32, 12, __constVal32, 0, __constVal63
+0	5828	111	#line 5828 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	7	111	#line 7 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	7	111	#line 7 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	8	111		set __Wait_7qG2_ms_7qG2_000_inline_main, 800
+0	7	114	#line 7 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	8551	114	#line 8551 "NXCDefs.h"
+0	8552	114		waitv __Wait_7qG2_ms_7qG2_000_inline_main
+0	8551	116	#line 8551 "NXCDefs.h"
+0	8	116	#line 8 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+0	9	116		exit -1, -1
+1	11	0	#line 11 "C:\Users\KKK\AppData\Local\Temp\temp.nxc"
+1	12	0		subret ____initialize_global_data_return
+#CLUMPS
+Clump	Name	Offset	File
+0	main	0	C:\Users\KKK\AppData\Local\Temp\temp.nxc
+1	__initialize_global_data	119	C:\Users\KKK\AppData\Local\Temp\temp.nxc
