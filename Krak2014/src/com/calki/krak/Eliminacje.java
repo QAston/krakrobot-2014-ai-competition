@@ -28,10 +28,14 @@ public class Eliminacje {
 	public static int NIEBIESKI = 2;
 	public static int CZARNY = 7;
 	
+	public static int countNiebieskie=0;
+	public static int countBiale=0;
+	
 	public static int posX = 0;
 	public static int posY = 0;
 	
 	public static ArrayList<EliminacjeRuch> listaRuchow;
+	public static ArrayList<EliminacjeWieza> listaWiez;
 	
 	public static int mapa[][] = new int[5][5];
 	
@@ -102,20 +106,21 @@ public class Eliminacje {
 				double pamietajRotate = pilot.getRotateSpeed();
 				pilot.setRotateSpeed(15);
 				while(colorSensor.getColorID()!=NIEBIESKI || colorSensor.getColorID()!=BIALY){
-					LCD.drawString(Float.toString(pilot.getAngleIncrement()), 0, 0);
 					pilot.rotateRight();
 					
 					if(colorSensor.getColorID()==NIEBIESKI){
-						Sound.beep();
-						//pose = opp.getPose();
-						mapaUstawWieze(NIEBIESKI);
 						pilot.rotate(-pilot.getAngleIncrement());
+						pose = opp.getPose();
+						listaWiez.add(new EliminacjeWieza(pose.getX(), pose.getY(), NIEBIESKI));
+						countNiebieskie++;
+						sprawdzListeWiez();
 						break;
 					}else if(colorSensor.getColorID()==BIALY){
-						Sound.twoBeeps();
-						//pose = opp.getPose();
-						mapaUstawWieze(BIALY);
 						pilot.rotate(-pilot.getAngleIncrement());
+						pose = opp.getPose();
+						listaWiez.add(new EliminacjeWieza(pose.getX(), pose.getY(), BIALY));
+						countBiale++;
+						sprawdzListeWiez();
 						break;
 					}
 					
@@ -210,7 +215,29 @@ public class Eliminacje {
 		Sound.twoBeeps();
 	}
 	
+	public static double angleDiff(double currAngle, double newAngle){
+	   	 double zm1 = Math.abs(newAngle - currAngle);
+	   	 double zm2 = Math.abs(newAngle-currAngle+2*Math.PI);
+	   	 double zm3 = Math.abs(newAngle-currAngle-2*Math.PI);
+	   	 return Math.min(zm1, Math.min(zm2, zm3));
+	    }
+	    //---- obie funkcje przyjmuja wartoœci dodatnie, zarówno dla x jak i y --//
+	    //zwraca wartoœæ o jak¹ ma obróciæ siê robot aby staæ przodem do docelowych wspó³rzênych x,y
+	    public static double setDirection(Pose actualPose, double destX, double destY){
+	    	double newAngle = (Math.atan2(actualPose.getLocation().getY()-destY,actualPose.getLocation().getX()+destX));
+	    	System.out.println(-(Math.toDegrees(angleDiff(Math.toRadians(actualPose.getHeading()), newAngle))));
+	    	return -(Math.toDegrees(angleDiff(Math.toRadians(actualPose.getHeading()), newAngle)));
+	    }//u¿ycie:
+	    // pilot.rotate(setDirection(pose, 128.0d,128.0d); -> podaje mu aktualna pozycjê oraz punkt w którego strone ma sie obórcic
+	    
+	    public static double setDistanceToPoint(Pose actualPose, double destX, double destY){
+	    	destX = -destX;
+	    	double d = Math.sqrt((Math.pow((destX - actualPose.getLocation().getX()),2.0d)+(Math.pow((destY - actualPose.getLocation().getY()), 2.0d))));
+	    	return d;
+	    }
+	
 	public static void setupRuchy(){
+		listaWiez = new ArrayList<EliminacjeWieza>();
 		listaRuchow = new ArrayList<EliminacjeRuch>();
 		listaRuchow.add(new EliminacjeRuch(128,0));
 		listaRuchow.add(new EliminacjeRuch(128,128));
@@ -223,20 +250,52 @@ public class Eliminacje {
 		listaRuchow.add(new EliminacjeRuch(64,64));
 	}
 	
+	public static void sprawdzListeWiez(){
+		int i;
+		
+		if(countNiebieskie==2 || countBiale==2){
+			listaRuchow.clear();
+			for(i=0;i<listaWiez.size();i++){
+				EliminacjeWieza aktualnaWieza = listaWiez.get(i);
+				if(aktualnaWieza.getKolor()==BIALY){
+					listaRuchow.add(new EliminacjeRuch(aktualnaWieza.getPozycjaX(), aktualnaWieza.getPozycjaY()));
+					listaRuchow.add(new EliminacjeRuch(0, 0));
+				}else{
+					listaRuchow.add(new EliminacjeRuch(aktualnaWieza.getPozycjaX(), aktualnaWieza.getPozycjaY()));
+					listaRuchow.add(new EliminacjeRuch(64, 64));
+				}
+			}
+		}
+	}
 	
 	public static void main(String[] args) throws InterruptedException {
 		pilot = new DifferentialPilot(8.3d,8.18d,19.2d,Motor.C,Motor.A,true);	  
-		//opp = new OdometryPoseProvider(pilot);
-		//ultraSensor = new UltrasonicSensor(SensorPort.S1);
-		//colorSensor = new ColorSensor(SensorPort.S4);
-		//touchSensor = new TouchSensor(SensorPort.S2);
+		opp = new OdometryPoseProvider(pilot);
+		pose=opp.getPose();
+		
+		ultraSensor = new UltrasonicSensor(SensorPort.S1);
+		colorSensor = new ColorSensor(SensorPort.S4);
+		touchSensor = new TouchSensor(SensorPort.S2);
+		
 		setupRuchy();
 		pilot.setTravelSpeed(15);
 	    pilot.setRotateSpeed(45);
 	    int i=0;
 	    int powrotRuch;
-	    while(listaRuchow.get(i)!=null){
-	    	
+	    EliminacjeRuch aktualnyRuch;
+	    while(i<=listaRuchow.size()){
+	    	aktualnyRuch=listaRuchow.get(i);
+	    	LCD.clear();
+	    	System.out.println(aktualnyRuch.getPozycjaX());
+	    	System.out.println(aktualnyRuch.getPozycjaY());
+	    	System.out.println(pose.getX());
+	    	System.out.println(pose.getY());
+	    	pilot.rotate(setDirection(pose, aktualnyRuch.getPozycjaX(),aktualnyRuch.getPozycjaY()));
+	    	pose=opp.getPose();
+	    	pilot.travel(setDistanceToPoint(pose, aktualnyRuch.getPozycjaX(),aktualnyRuch.getPozycjaY()));
+	    	pose=opp.getPose();
+	    	Button.waitForAnyPress();
+	    	i=i+1;
 	    }
 	    Sound.twoBeeps();
 	    
