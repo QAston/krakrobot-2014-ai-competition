@@ -1,0 +1,684 @@
+from defines import *
+from robot_controller import RobotController
+import random
+import math
+def myk(a):
+    b = int(a)
+    a=a-b
+    if a < 0.5:
+        return int(b)
+    return int(b+1)
+
+class bfs:
+    x=0
+    y=0
+    krok=0
+
+
+
+def oddupcenie(dfadfjdsauifjeiahyw8yhfiuhvagbcuyadcyueawchjbahxjbsdgcavtywfcyravvciwqhxuoagcyuvarecytvawbecyawigvcaw, asdhuyasuygfyuaegduywagduywgduyawgduwaguysdgvcavawegfuyeauycvbhvbdfavgyuafgauer):
+    if asdhuyasuygfyuaegduywagduywgduyawgduwaguysdgvcavawegfuyeauycvbhvbdfavgyuafgauer == 0:
+        return abs ( 1.5*3.1415 -  dfadfjdsauifjeiahyw8yhfiuhvagbcuyadcyueawchjbahxjbsdgcavtywfcyravvciwqhxuoagcyuvarecytvawbecyawigvcaw)
+    if asdhuyasuygfyuaegduywagduywgduyawgduwaguysdgvcavawegfuyeauycvbhvbdfavgyuafgauer == 1:
+        return abs ( 3.1415 -  dfadfjdsauifjeiahyw8yhfiuhvagbcuyadcyueawchjbahxjbsdgcavtywfcyravvciwqhxuoagcyuvarecytvawbecyawigvcaw)
+    if asdhuyasuygfyuaegduywagduywgduyawgduwaguysdgvcavawegfuyeauycvbhvbdfavgyuafgauer == 2:
+        return abs ( 3.1415/2 -  dfadfjdsauifjeiahyw8yhfiuhvagbcuyadcyueawchjbahxjbsdgcavtywfcyravvciwqhxuoagcyuvarecytvawbecyawigvcaw)
+    if asdhuyasuygfyuaegduywagduywgduyawgduwaguysdgvcavawegfuyeauycvbhvbdfavgyuafgauer == 3:
+        if dfadfjdsauifjeiahyw8yhfiuhvagbcuyadcyueawchjbahxjbsdgcavtywfcyravvciwqhxuoagcyuvarecytvawbecyawigvcaw > 3 :
+            dfadfjdsauifjeiahyw8yhfiuhvagbcuyadcyueawchjbahxjbsdgcavtywfcyravvciwqhxuoagcyuvarecytvawbecyawigvcaw -= 2 * 3.1415
+        return abs ( dfadfjdsauifjeiahyw8yhfiuhvagbcuyadcyueawchjbahxjbsdgcavtywfcyravvciwqhxuoagcyuvarecytvawbecyawigvcaw)
+
+
+
+
+class kolejka:
+    x = {}
+    y = {}
+    k = {}
+    w= int(0)
+    s = int(0)
+    def dodaj(self,  x , y , k):
+        self.x[self.w]=x
+        self.y[self.w]=y
+        self.k[self.w]=k
+        self.w+=1
+    def pokaz(self):
+        r = bfs()
+        r.x = self.x[self.s]
+        r.y = self.y[self.s]
+        r.krok = self.k[self.s]
+        return r
+
+    def zdejm(self):
+        self.s+=1
+
+    def size(self):
+        return self.w-self.s
+
+    def poka(self):
+        tr=""
+        ss=self.s
+        while ss < self.w:
+            tr=tr+str( self.t[ss] )
+            ss+=1
+        return tr
+
+
+
+
+
+
+
+global czyscioch
+czyscioch = {}
+
+czyscioch[0] = -1
+
+
+
+
+def deefes(t,  xx,  yy):
+
+
+    global czyscioch
+
+    j=0
+
+
+
+
+
+    bfs_kolej = kolejka()
+    teges = bfs()
+    x=0
+    y=0
+    krok=0
+
+    x=xx
+    y=yy
+
+    st=""
+
+
+    bfs_kolej.dodaj(x, y,  krok)
+
+    st = st + "."
+
+
+    while bfs_kolej.size() > 0:
+        teges = bfs_kolej.pokaz()
+        bfs_kolej.zdejm()
+
+
+
+        x = teges.x
+        y= teges.y
+        krok = teges.krok+1
+
+
+
+        if t[x*1000+y] == 0:
+      ##     while bfs_kolej.size() > 0:
+      ##        bfs_kolej.zdejm()
+            return krok
+
+
+
+        t[x*1000+y] = -1
+
+        czyscioch[j] = x*1000+y
+        j+=1
+        czyscioch[j]=-1
+
+
+
+
+        if t[ (x )*1000 + (y + 1 )  ] != -1:
+            bfs_kolej.dodaj(x, y+1, krok)
+
+
+        if y > 0:
+            if t[ (x )*1000 + (y - 1 )  ] != -1:
+                bfs_kolej.dodaj(x, y-1, krok)
+
+
+        if t[ (x +1 )*1000 + (y  )  ] != -1:
+            bfs_kolej.dodaj(x+1, y, krok)
+
+
+        if x > 0:
+            if t[ (x - 1)*1000 + (y  )  ] != -1:
+                bfs_kolej.dodaj(x-1, y, krok)
+
+
+
+
+    return -1
+
+
+def disco_polo(a):
+    while a > 2*3.1415:
+        a-=2*3.1415
+    while a < 0:
+        a+=2*3.1415
+    return a
+
+
+class ForwardTurningRobotController(RobotController):
+    def init(cycki, starting_position, steering_noise, distance_noise, sonar_noise, measurement_noise, speed, turning_speed,gps_delay,execution_cpu_time_limit):
+        cycki.speed = speed
+        cycki.dupa=123
+        cycki.x = starting_position[1]
+        cycki.y = starting_position[0]
+        cycki.pgr_x=starting_position[1]
+        cycki.pgr_y=y=starting_position[0]
+        cycki.spgr_x = starting_position[1]
+        cycki.spgr_y = starting_position[0]
+        cycki.ts = turning_speed
+        cycki.lewo = 1.57/ TICK_ROTATE
+        cycki.prawo = -1.57/ TICK_ROTATE
+        cycki.zawrotka = 3.1415 / TICK_ROTATE
+        cycki.stan = 0
+        cycki.arkus=3.1415 + 3.1415/2
+        cycki.tab = {}
+        cycki.ttt = {}
+        cycki.dx=0
+        cycki.dy=0
+        cycki.gdzie=0
+        cycki.sonar_ilosc_probek=0
+
+        cycki.sonar_ilosc_probek = (sonar_noise/0.1 -1) * 8
+
+
+
+        cycki.sonar_ilosc_probek = myk( cycki.sonar_ilosc_probek )
+        cycki.sonar_suma=0
+
+        cycki.pomiaring=0
+
+
+        cycki.ilosc_probek_std =  myk(math.pow(10*(measurement_noise+0.1) ,  2.3))
+
+        if cycki.ilosc_probek_std == 0:
+            cycki.ilosc_probek_str=1
+
+
+
+        cycki.ilosc_probek=cycki.ilosc_probek_std
+        cycki.s_pgr_x  = 0
+        cycki.s_pgr_y = 0
+        cycki.probka=0
+        cycki.koniec=0
+        cycki.tangens=0.0
+
+        cycki.med_x = []
+        cycki.med_y = []
+
+
+        cycki.min=10000
+        cycki.kierunek = 0
+
+        i =0
+        while i < 1000010:
+            cycki.tab[i] = 0
+            cycki.ttt[i]=0
+            i=i+1
+
+        global a
+        a=0
+
+
+    def act(cycki):
+        global a
+        global trasa
+        global czyscioch
+
+      ##  if cycki.pomiaring > 0
+     ##       return[SENSE_SONAR]
+
+
+        if cycki.koniec == 1:
+            return[FINISH]
+
+     ##   return [WRITE_CONSOLE ,  "disco polo"]
+
+
+
+        if cycki.stan == -1:
+            cycki.stan=0
+          ##  return [WRITE_CONSOLE,  str( myk(3.52))]
+       ##     return [WRITE_CONSOLE, "gps x: " + str(myk(cycki.pgr_x)) +", x: " + str(cycki.x) +  ", gps y: "+  str(myk(cycki.pgr_y)) +", y: " + str(cycki.y) +", atan:  " + str(cycki.arkus) +", tan:  " + str(cycki.tangens)]
+            return [WRITE_CONSOLE,  "odddupcenie: " +str( oddupcenie(cycki.arkus,  cycki.kierunek) )   ]
+
+
+        if cycki.stan == 0:
+            cycki.stan=1
+            cycki.min=10000
+            cycki.probka=0
+            cycki.s_pgr_x=0
+            cycki.s_pgr_y=0
+            cycki.med_x = []
+            cycki.med_y = []
+            cycki.gdzie = (cycki.kierunek+2)  % 4
+            return [SENSE_FIELD]
+
+
+        if cycki.stan > 99 and cycki.stan < 100+cycki.ilosc_probek:
+            cycki.stan += 1
+            if cycki.stan == 100 + cycki.ilosc_probek:
+                cycki.stan=0
+            return [SENSE_GPS]
+
+
+
+        if cycki.stan == 1:
+            cycki.stan=2
+            return [SENSE_SONAR]
+
+
+        if cycki.stan == 2:
+            cycki.stan=3
+            cycki.kierunek = (cycki.kierunek + 3) % 4;
+
+            if cycki.kierunek== 0:
+                da = 3.1415 + 3.1415/2
+            if cycki.kierunek == 1:
+                da = 3.1415
+            if cycki.kierunek == 2:
+                da = 3.1415/2
+            if cycki.kierunek == 3:
+                da = 0
+            starsze = cycki.arkus
+            cycki.arkus = disco_polo (   da   )
+            return [TURN,   ( disco_polo ( da - starsze ) )  / TICK_ROTATE ]
+
+
+        if cycki.stan == 3:
+            cycki.stan=4
+            return [SENSE_SONAR]
+
+
+        if cycki.stan == 4:
+            cycki.stan=5
+            cycki.kierunek = (cycki.kierunek + 2) % 4;
+            cycki.arkus = disco_polo ( cycki.arkus + 3.1415 )
+            return [TURN,  cycki.zawrotka]
+
+        if cycki.stan == 5:
+            cycki.stan=6
+            return [SENSE_SONAR]
+
+
+
+
+
+        if cycki.stan == 8:
+            krok=0
+
+
+            odp=""
+            dzie=0
+            mini = 1213128
+            mini=""
+            cyk = 0
+
+
+            i=0
+
+
+            cycki.ttt[cycki.x*1000 + cycki.y ]=-1
+
+            if cycki.ttt[ (cycki.x )*1000 + (cycki.y +1 ) ] != -1 :
+                cyk +=1
+                krok = deefes ( cycki.ttt, cycki.x,  cycki.y+1)
+                if krok < mini and krok > 0:
+                    mini = krok
+                    dzie = 0
+
+                i=0
+                while czyscioch[i] != -1:
+                    cycki.ttt[ czyscioch[i] ] = cycki.tab[czyscioch[i] ]
+                    i+=1
+                cycki.ttt[cycki.x*1000 + cycki.y ]=-1
+
+
+
+
+
+            if cycki.ttt[ (cycki.x )*1000 + (cycki.y -1 ) ] != -1 :
+                cyk +=1
+                krok = deefes ( cycki.ttt, cycki.x,  cycki.y-1 )
+                if krok < mini and krok > 0:
+                    mini = krok
+                    dzie = 2
+
+                i=0
+                while czyscioch[i] != -1:
+                    cycki.ttt[ czyscioch[i] ] = cycki.tab[czyscioch[i] ]
+                    i+=1
+                cycki.ttt[cycki.x*1000 + cycki.y ]=-1
+
+
+
+            if cycki.ttt[ (cycki.x + 1 )*1000 + (cycki.y  ) ] != -1  :
+                cyk +=1
+                krok = deefes ( cycki.ttt, cycki.x + 1,  cycki.y  )
+                if krok < mini and krok > 0:
+                    mini = krok
+                    dzie = 3
+
+                i=0
+                while czyscioch[i] != -1:
+                    cycki.ttt[ czyscioch[i] ] = cycki.tab[czyscioch[i] ]
+                    i+=1
+                cycki.ttt[cycki.x*1000 + cycki.y ]=-1
+
+
+
+
+            if cycki.ttt[ (cycki.x -1 )*1000 + (cycki.y ) ] != -1  :
+                cyk +=1
+                krok = deefes ( cycki.ttt, cycki.x -1 ,   cycki.y )
+                if krok < mini and krok > 0:
+                    mini = krok
+                    dzie = 1
+
+                i=0
+                while czyscioch[i] != -1:
+                    cycki.ttt[ czyscioch[i] ] = cycki.tab[czyscioch[i] ]
+                    i+=1
+
+
+       ##     print(123)
+            cycki.ttt[cycki.x*1000 + cycki.y ]=cycki.tab[cycki.x*1000 + cycki.y ]
+            cycki.gdzie = dzie
+            cycki.stan = 6
+
+           ## #return [WRITE_CONSOLE , str(krok) + " " +str(dzie) ]
+           ## return [WRITE_CONSOLE ,  "disco polo"]
+
+
+
+
+        if cycki.stan == 6:
+
+
+            dx=0
+            dy=0
+            arkadd=0
+
+
+
+
+            if cycki.gdzie == 0:
+                dy = cycki.y + 1
+                dx= cycki.x
+
+            if cycki.gdzie == 1:
+                dy = cycki.y
+                dx= cycki.x - 1
+
+            if cycki.gdzie == 2:
+                dy = cycki.y - 1
+                dx= cycki.x
+
+            if cycki.gdzie == 3:
+                dy = cycki.y
+                dx= cycki.x + 1
+
+
+
+            cycki.dx = dx
+            cycki.dy = dy
+            if  dx - cycki.pgr_x != 0:
+                kutangens = ( cycki.pgr_y - dy ) / ( dx - cycki.pgr_x )
+            else:
+                kutangens = 999999
+            darkus = disco_polo ( math.atan(kutangens) )
+
+
+
+            if cycki.gdzie == 2:
+                if kutangens < 0:
+                    arkadd = 3.1415
+
+
+
+
+
+
+            if cycki.gdzie == 0:
+                if kutangens > 0:
+                    arkadd = 3.1415
+
+
+
+
+            if cycki.gdzie == 1:
+                arkadd = 3.1415
+
+
+            darkus = disco_polo ( darkus + arkadd )
+
+            """"
+            if cycki.kierunek == cycki.gdzie:
+                cycki.stan = 0
+                if cycki.kierunek == 0:
+                    cycki.y += 1
+                if cycki.kierunek == 1:
+                    cycki.x += -1
+                if cycki.kierunek == 2:
+                    cycki.y += -1
+                if cycki.kierunek == 3:
+                    cycki.x += 1
+                return [MOVE,  1 / TICK_MOVE]
+            else:
+
+            """
+            cycki.stan = 7
+            stare =  cycki.kierunek
+            cycki.kierunek = cycki.gdzie
+
+            stare_cycki = cycki.arkus
+            cycki.arkus = darkus
+
+            przekrenc = darkus - stare_cycki
+
+            if przekrenc > 3.1415:
+                przekrenc = przekrenc - 2*3.1415
+
+            if przekrenc < -3.1415:
+                przekrenc = przekrenc + 2*3.1415
+
+
+            return [TURN,  ( przekrenc)  / TICK_ROTATE  ]
+
+        if cycki.stan == 7:
+            cycki.stan=100
+
+            if cycki.kierunek == 0:
+                cycki.y += 1
+            if cycki.kierunek == 1:
+                cycki.x += -1
+            if cycki.kierunek == 2:
+                cycki.y += -1
+            if cycki.kierunek == 3:
+                cycki.x += 1
+
+            odl = math.sqrt( (cycki.dx - cycki.pgr_x)*(cycki.dx - cycki.pgr_x)   +  (cycki.dy - cycki.pgr_y)*(cycki.dy - cycki.pgr_y)   )
+
+            return [MOVE,  odl / TICK_MOVE]
+
+
+
+
+
+
+
+
+
+     ##   return MOVE,  a
+        ##return WRITE_CONSOLE,  d
+     ##   if a%10==0:
+    ##        return [TURN,  cycki.zawrotka]
+   ##     return [MOVE,  10]
+
+    def on_sense_sonar(cycki, dist):
+        xx= myk(cycki.x)
+        yy=myk(cycki.y)
+
+        if cycki.pomiaring > 0
+         ##   cycki.pomiaring -= 0
+        ##    cycki.sonar_suma += dist
+
+        """"
+        if cycki.pomiaring == 0
+            cycki.dupa = cycki.sonar_suma / cycki.sonar_ilosc_probek
+            dist = cycki.dupa
+
+        else
+
+      ##  cycki.dupa=dist
+
+            if cycki.kierunek == 0:
+                yy += 1
+            if cycki.kierunek == 1:
+                xx += -1
+            if cycki.kierunek == 2:
+                yy += -1
+            if cycki.kierunek == 3:
+                xx += 1
+
+            if dist > 1.2:
+
+
+                if cycki.tab[  (xx)*1000 + (yy)  ]  < cycki.min  and cycki.tab[  (xx)*1000 + (yy)  ] != -1 :
+                    cycki.min = cycki.tab[  (xx)*1000 + (yy)  ]
+                    cycki.gdzie = cycki.kierunek
+
+            if dist < 1:
+                cycki.tab[  (xx)*1000 + (yy)  ]=-1
+                cycki.ttt[  (xx)*1000 + (yy)  ]=-1
+
+        """
+
+    def on_sense_field(cycki, file_type, file_parameter):
+        if cycki.tab[cycki.x*1000 + cycki.y]  != 0:
+            cycki.stan = 8
+            cycki.ilosc_probek =  cycki.ilosc_probek_std
+        else:
+            cycki.ilosc_probek = cycki.ilosc_probek_std
+
+
+
+
+
+
+        if file_type == 4:
+            cycki.koniec =1
+
+
+
+
+        if oddupcenie(cycki.arkus,  cycki.kierunek) < 0.25 and cycki.tab[cycki.x*1000 + cycki.y] == 0 :
+            cycki.tab[cycki.x*1000 + cycki.y]  += 1
+            cycki.ttt[cycki.x*1000 + cycki.y]  += 1
+        if oddupcenie(cycki.arkus,  cycki.kierunek) >= 0.25 and cycki.tab[cycki.x*1000 + cycki.y] == 0 :
+            cycki.gdzie = (cycki.kierunek + 2) % 4
+            cycki.stan = 6
+
+
+
+        if file_type == 10:
+            if file_parameter == 0:
+                cycki.gdzie = 0
+            if file_parameter == 2:
+                cycki.gdzie = 3
+            if file_parameter == 4:
+                cycki.gdzie = 2
+            if file_parameter == 6:
+                cycki.gdzie = 1
+
+            cycki.tab[cycki.x*1000 + cycki.y] = - 1
+            cycki.ttt[cycki.x*1000 + cycki.y] = - 1
+            cycki.stan = 6
+
+    def on_sense_gps(cycki, x, y):
+     ##   cycki.spgr_x = cycki.pgr_x
+     ##   cycki.spgr_y = cycki.pgr_y
+    ##    cycki.pgr_x=y
+     ##   cycki.pgr_y=x
+
+        cycki.s_pgr_x += y
+        cycki.s_pgr_y += x
+
+        cycki.med_x.append(y)
+        cycki.med_y.append(x)
+
+
+        cycki.probka += 1
+
+        if cycki.probka == cycki.ilosc_probek:
+            cycki.spgr_x = cycki.pgr_x
+            cycki.spgr_y = cycki.pgr_y
+            cycki.pgr_x = cycki.s_pgr_x / cycki.probka
+            cycki.pgr_y = cycki.s_pgr_y / cycki.probka
+
+
+      ##      cycki.med_x.sort()
+      ##      cycki.med_y.sort()
+
+         ##   cycki.pgr_x = cycki.med_x[ int(cycki.probka/2) ]
+         ##   cycki.pgr_y = cycki.med_y[ int(cycki.probka/2) ]
+
+            ssxx=0
+            ssyy=0
+            i=0
+        ##    while i<50:
+         ##       ssxx += cycki.med_x[ int(cycki.probka/2-25) +i ]
+        ##        ssyy += cycki.med_y[ int(cycki.probka/2-25) +i ]
+        ##        i+=1
+
+
+
+
+        ##    cycki.pgr_x = ssxx / 50
+        ##    cycki.pgr_y = ssyy / 50
+
+            cycki.tangens = (cycki.spgr_y - cycki.pgr_y) / (cycki.pgr_x - cycki.spgr_x )
+            arcadd=0.0
+
+
+            if cycki.kierunek == 2:
+                if cycki.tangens < 0:
+                    arcadd = 3.1415
+
+
+
+
+
+
+            if cycki.kierunek == 0:
+                if cycki.tangens > 0:
+                    arcadd = 3.1415
+
+            global a
+
+
+            if cycki.kierunek == 1:
+                arcadd = 3.1415
+
+            if a > 0:
+                cycki.arkus = math.atan ( cycki.tangens)
+                cycki.arkus+= arcadd
+                cycki.arkus = disco_polo ( cycki.arkus)
+            a = a+1
+
+        """"
+        while cycki.arkus > 2*3.1415:
+            cycki.arkus -= 2*3.14
+
+        while cycki.arkus < 0:
+
+            cycki.arkus += 2*3.14
+        """

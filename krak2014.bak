@@ -247,7 +247,7 @@ void search(Position& pos, char orientation, bool czyPowrot, Stos_char& outKieru
                         if (!fields[targetIndex].visited && pole_canEnter(plansza[targetIndex]))
                         {
                             next.g = current.g + calcKoszt(i);
-                            next.f = current.g + calcHeurystyka(next.pos, czyPowrot);
+                            next.f = current.g + calcHeurystyka(pos, czyPowrot);
                             heap_AstarNode_minNode_insert(open, next);
 
                             fields[targetIndex].visited = true;

@@ -1,32 +1,10 @@
 package com.calki.krak;
 
-import lejos.robotics.localization.PoseProvider;
-import lejos.robotics.navigation.DifferentialPilot;
+public interface Ruchacz {
 
-public class Ruchacz {
+	void forward();
 	
-	DifferentialPilot pilot;
-	PoseProvider pp;
+	void turnLeft();
 	
-	Ruchacz(DifferentialPilot pilot, PoseProvider pp)
-	{
-		this.pilot = pilot;
-		this.pp = pp;
-	}
-	
-	void forward()
-	{
-	     pilot.travel(32);
-	}
-	
-	void turnLeft()
-	{
-	     pilot.rotate(-90);
-	}
-	
-	void turnRight()
-	{
-	     pilot.rotate(90);
-	}
-
+	void turnRight();
 }

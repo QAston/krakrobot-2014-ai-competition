@@ -2,7 +2,7 @@ package com.calki.krak;
 
 import lejos.robotics.pathfinding.Node;
 
-public class Mapa {
+public class BuiltinAstarPathFinder {
 	
 	// uzywamy metryki taksówkowej
 	class TaxiNode extends Node
@@ -27,7 +27,7 @@ public class Mapa {
 	public static final int ROZMIAR_MAPY = 5;
 	Node[] nodes;
 	
-	Mapa()
+	BuiltinAstarPathFinder()
 	{
 		for(int i = 0; i < ROZMIAR_MAPY; ++i)
 		{
@@ -41,12 +41,12 @@ public class Mapa {
 		{
 			for(int j = 0; j < ROZMIAR_MAPY; ++j)
 			{
-				Position p = new Position(i, j);
+				Position p = Position.get(i, j);
 				Node n = nodes[toIndex(i, j)];
 				for(GlobalDirection globalDirection : GlobalDirection.values())
 				{
 					Position neighbour = p.getNeighbour(globalDirection);
-					if (neighbour.isValid())
+					if (neighbour != null)
 					{
 						n.addNeighbor(nodes[neighbour.toIndex()]);
 					}
@@ -74,10 +74,5 @@ public class Mapa {
 	public static int toIndex(int x, int y)
 	{
 		return x * ROZMIAR_MAPY + y;
-	}
-	
-	public static Position toPosition(int index)
-	{
-		return new Position(index / ROZMIAR_MAPY, index % ROZMIAR_MAPY);
 	}
 }

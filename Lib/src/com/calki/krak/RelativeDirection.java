@@ -13,7 +13,7 @@ public enum RelativeDirection {
 			this.index = index;
 		}
 		
-		int getIndex()
+		public int getIndex()
 		{
 			return index;
 		}

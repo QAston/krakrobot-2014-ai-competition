@@ -9,7 +9,7 @@ public class Final {
 	final DifferentialPilot pilot;
 	final OdometryPoseProvider opp;
 	final PositionProvider position;
-	final Mapa mapa;
+	final BuiltinAstarPathFinder mapa;
 	final Ruchacz ruchacz;
 	
 	Final()
@@ -18,10 +18,10 @@ public class Final {
 	    pilot.setTravelSpeed(15);
 	    pilot.setRotateSpeed(35);
 		opp = new OdometryPoseProvider(pilot);
-		position = new PositionProvider(opp);
-		mapa = new Mapa();
+		position = new PositionProviderImpl(opp);
+		mapa = new BuiltinAstarPathFinder();
 		
-		ruchacz = new Ruchacz(pilot, opp);
+		ruchacz = new RuchaczImpl(pilot, opp);
 		
 		
 	}
