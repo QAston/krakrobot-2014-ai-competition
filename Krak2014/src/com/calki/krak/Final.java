@@ -15,8 +15,6 @@ public class Final {
 	final DifferentialPilot pilot;
 	final OdometryPoseProvider opp;
 	final PositionProvider position;
-	//final BuiltinAstarPathFinder mapa;
-	final Ruchacz ruchacz;
 	
 	public PathFinder p;
 	public List<Position> path;
@@ -30,10 +28,8 @@ public class Final {
 		
 	    pilot.setTravelSpeed(15);
 	    pilot.setRotateSpeed(35);
+		//opp.setPose(new Pose(x, y, heading));
 		position = new PositionProviderImpl(opp);
-		//mapa = new BuiltinAstarPathFinder();
-		
-		ruchacz = new RuchaczImpl(pilot, opp);
 		
 	}
 	
@@ -58,12 +54,15 @@ public class Final {
 				}
 		};
 		Position aktualnaPozycjaRobotaNaMapie = Position.get(4, 4);
+		Position poleFinalowe = Position.get(0, 0);
 		GlobalDirection aktualnaRotacjaRobotaNaMapie = GlobalDirection.NORTH;
 		Map map = new Map(mapVals);
 		map.print();
 		p = new MyAstarPathFinder(Position.get(4, 4), GlobalDirection.NORTH, Position.get(0,0), map);
 		path = p.getPath();
 		pose=opp.getPose();
+		
+		StanRobota stanRobota = StanRobota.JAZDA_PO_PILKE;
 		
 		//KONIEC SETUP
 		int i=0;
@@ -109,9 +108,13 @@ public class Final {
 			
 			if(aktualnaPozycjaNaMapie==Position.get(0,0)){
 				
+				//zmiana wartosci pola finalowego
+				stanRobota = StanRobota.JAZDA_Z_PILKA;
+				poleFinalowe = Position.get(4, 4);
+				
 				//czekaj i obrot o 90
 				//czekaj
-				//zmiana wartosci pola finalowego
+	
 				//jazda
 			}
 			

@@ -64,4 +64,25 @@ public class Position {
 	    }
 	    return null; 
 	}
+	
+	GlobalDirection getLineDirection(Position target)
+	{
+		if (target.x > x)
+		{
+			return GlobalDirection.SOUTH;
+		}
+		if (target.x < x)
+		{
+			return GlobalDirection.NORTH;
+		}
+		if (target.y < y)
+		{
+			return GlobalDirection.WEST;
+		}
+		if (target.y > y)
+		{
+			return GlobalDirection.EAST;
+		}
+		throw new RuntimeException("Get line direction wrong value");
+	}
 }

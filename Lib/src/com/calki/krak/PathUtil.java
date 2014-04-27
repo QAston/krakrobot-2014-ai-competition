@@ -1,13 +1,10 @@
 package com.calki.krak;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PathUtil {
-	public static List<RelativeDirection> pathToMoves(List<Position> path)
-	{
-		return null;
-	}
-	
+
 	public static void printPath(List<Position> path)
 	{
 		for(Position p:path)

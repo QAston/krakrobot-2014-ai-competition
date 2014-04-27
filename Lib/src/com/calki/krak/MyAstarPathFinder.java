@@ -25,7 +25,6 @@ public class MyAstarPathFinder implements PathFinder {
 
 	private static class AstarField {
 		Position fromWhere;
-		boolean visited;
 	}
 
 	public MyAstarPathFinder(Position start, GlobalDirection startOrientation, Position finish, Map map) {
@@ -97,7 +96,6 @@ public class MyAstarPathFinder implements PathFinder {
 
 								field = new AstarField();
 
-								field.visited = true;
 								field.fromWhere = current.pos;
 
 								fields[next.pos.x][next.pos.y] = field;
