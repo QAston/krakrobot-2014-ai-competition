@@ -34,10 +34,12 @@ public class Final {
 		//mapa = new BuiltinAstarPathFinder();
 		
 		ruchacz = new RuchaczImpl(pilot, opp);
+		
 	}
 	
 	void run()
 	{
+		//SETUP
 		FieldType[][] mapVals = {
 				{
 					FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN
@@ -59,10 +61,11 @@ public class Final {
 		GlobalDirection aktualnaRotacjaRobotaNaMapie = GlobalDirection.NORTH;
 		Map map = new Map(mapVals);
 		map.print();
-		PathFinder p = new MyAstarPathFinder(Position.get(4, 4), GlobalDirection.NORTH, Position.get(0,0), map);
-		List<Position> path = p.getPath();
+		p = new MyAstarPathFinder(Position.get(4, 4), GlobalDirection.NORTH, Position.get(0,0), map);
+		path = p.getPath();
 		pose=opp.getPose();
 		
+		//KONIEC SETUP
 		int i=0;
 		
 		while(i <= path.size()){
@@ -82,6 +85,9 @@ public class Final {
 					mapVals[(int)pose.getX()/32][(int)pose.getY()/32+1]=FieldType.TOWER;
 					break;
 				}
+				//Tutaj ustawianie pozycji
+				p = new MyAstarPathFinder(Position.get(4, 4), GlobalDirection.NORTH, Position.get(0,0), map);
+				path = p.getPath();
 			}
 			
 			if(ultraSensor.getDistance()>48 && ultraSensor.getDistance()<77){	//2 pola
