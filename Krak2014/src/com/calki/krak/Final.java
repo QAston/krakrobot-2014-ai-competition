@@ -25,11 +25,12 @@ public class Final {
 		
 	Final()
 	{
-		pilot = new DifferentialPilot(8.3d,8.2d,18.5d,Motor.C,Motor.A,true);
+		pilot = new DifferentialPilot(4.32d, 12.4, Motor.A, Motor.C,true);
 		opp = new OdometryPoseProvider(pilot);
 		
-	    pilot.setTravelSpeed(15);
-	    pilot.setRotateSpeed(35);
+		pilot.setAcceleration(15);
+		pilot.setTravelSpeed(25);
+		pilot.setRotateSpeed(35);
 		//opp.setPose(new Pose(x, y, heading));
 		position = new PositionProviderImpl(opp);
 		ultraSensor = new UltrasonicSensor(SensorPort.S1);
@@ -66,32 +67,39 @@ public class Final {
 		// glowna petla
 		while(true)
 		{
+			System.out.println("Glowna");
 			p = new MyAstarPathFinder(aktualnaPozycjaRobotaNaMapie, aktualnaRotacjaRobotaNaMapie, poleFinalowe, map);
 			path = p.getPath();
 			
 			int i=0;
 			
-			petla_sciezki: while(i < path.size()){
-				System.out.println("Mapa:");
+			while(i < path.size()){
+				
+				System.out.println("Path");
 				map.print();
+
 				Position docelowaPozycjaNaMapie = path.get(i);
+				
+				RelativeDirection turn = aktualnaRotacjaRobotaNaMapie.turnAsRelative(aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie));
+				
+				look(turn);
 				
 				int aktualnyOdczytUltraSensora = odczytajUltra();
 				
 				System.out.println("Ultra: "+aktualnyOdczytUltraSensora);
 				
 				// 1 pole do przodu
-				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<20)
+				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<50)
 				{
 					map.markTower(docelowaPozycjaNaMapie);
-					break petla_sciezki; // - wymysl nowa sciezke
+					break;
 				}
 				else
 				{
 					if (docelowaPozycjaNaMapie != null)
 						map.markEmpty(docelowaPozycjaNaMapie);
 				}
-				
+					
 				// wjezdzamy na pole podawania pilki
 				if(docelowaPozycjaNaMapie==Position.get(0,0) && stanRobota == StanRobota.JAZDA_PO_PILKE){
 					
@@ -104,7 +112,7 @@ public class Final {
 					Thread.sleep(1000);
 					aktualnaRotacjaRobotaNaMapie = GlobalDirection.EAST;
 					pilot.travel(20);
-					//jazda
+					break;
 				}
 				
 				// zakonczenie jazdy
@@ -113,8 +121,6 @@ public class Final {
 					Sound.twoBeeps();
 					Button.waitForAnyPress();
 				}
-				
-				RelativeDirection turn = aktualnaRotacjaRobotaNaMapie.turnAsRelative(aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie));
 				
 				move(turn);
 				/*
@@ -141,21 +147,40 @@ public class Final {
 				pilot.travel(32);
 				break;
 			case BACK:
+				pilot.travel(32);
+				break;
+			case LEFT:
+				pilot.travel(32);
+				break;
+			case RIGHT:
+				pilot.travel(32);
+				break;
+		}
+	}
+	
+	public void look(RelativeDirection dir)
+	{
+		switch(dir)
+		{
+			case FRONT:
+				break;
+			case BACK:
 				pilot.rotate(180);
 				break;
 			case LEFT:
-				pilot.rotate(-90);
+				pilot.rotate(90);
 				break;
 			case RIGHT:
-				pilot.rotate(90);
+				pilot.rotate(-90);
 				break;
 		}
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Throwable {
 		//
 	    Final f = new Final();
+	    //f.run();
 	    try {
 			f.run();
 		} catch (Throwable e) {
