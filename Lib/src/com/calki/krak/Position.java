@@ -30,6 +30,15 @@ public class Position {
 		this.y = y;
 	}
 	
+	public int getCartesianX(){
+		
+		return 128 - this.x*32;
+	}
+	
+	public int getCartesianY(){
+		return 128 - this.y*32;
+	}
+	
 	public int toIndex()
 	{
 		return x*Map.SIZE + y;
