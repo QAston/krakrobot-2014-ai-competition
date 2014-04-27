@@ -13,12 +13,12 @@ public enum GlobalDirection {
 			this.index = index;
 		}
 		
-		int getIndex()
+		public int getIndex()
 		{
 			return index;
 		}
 		
-		GlobalDirection relativeFrom(RelativeDirection relative)
+		public GlobalDirection relativeFrom(RelativeDirection relative)
 		{
 			return relativeAsGlobal[getIndex()][relative.getIndex()];
 		}
