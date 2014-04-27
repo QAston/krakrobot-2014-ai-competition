@@ -31,6 +31,7 @@ public class Final {
 	    pilot.setRotateSpeed(35);
 		//opp.setPose(new Pose(x, y, heading));
 		position = new PositionProviderImpl(opp);
+		ultraSensor = new UltrasonicSensor(SensorPort.S1);
 		
 	}
 	
@@ -61,53 +62,48 @@ public class Final {
 		map.print();
 		StanRobota stanRobota = StanRobota.JAZDA_PO_PILKE;
 		
+		// glowna petla
 		while(true)
 		{
+			System.out.println("Mapa:");
+			map.print();
 			p = new MyAstarPathFinder(aktualnaPozycjaRobotaNaMapie, aktualnaRotacjaRobotaNaMapie, poleFinalowe, map);
 			path = p.getPath();
 			pose=opp.getPose();
 			
-			//KONIEC SETUP
 			int i=0;
 			
 			petla_sciezki: while(i <= path.size()){
 				Position docelowaPozycjaNaMapie = path.get(i);
-				// wykryto wieze na polu z przodu
-				if(ultraSensor.getDistance()>15 && ultraSensor.getDistance()<45){	//1 pole 
-					switch(aktualnaRotacjaRobotaNaMapie){
-					case NORTH:
-						mapVals[(int)pose.getX()/32+1][(int)pose.getY()/32]=FieldType.TOWER;
-						break;
-					case SOUTH:
-						mapVals[(int)pose.getX()/32-1][(int)pose.getY()/32]=FieldType.TOWER;
-						break;
-					case WEST:
-						mapVals[(int)pose.getX()/32][(int)pose.getY()/32-1]=FieldType.TOWER;
-						break;
-					case EAST:
-						mapVals[(int)pose.getX()/32][(int)pose.getY()/32+1]=FieldType.TOWER;
-						break;
-					}
+				
+				Position docelowaForward = 
+						docelowaPozycjaNaMapie.getNeighbour(
+								aktualnaRotacjaRobotaNaMapie.relativeFrom(RelativeDirection.FRONT));
+				
+				
+				int aktualnyOdczytUltraSensora = odczytajUltra();
+				
+				System.out.println("Ultra: "+aktualnyOdczytUltraSensora);
+				
+				// 1 pole do przodu
+				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<45)
+				{
+					map.markTower(docelowaPozycjaNaMapie);
 					break petla_sciezki; // - wymysl nowa sciezke
 				}
-				
-				// wykryto wieze troche dalej z przodu
-				if(ultraSensor.getDistance()>48 && ultraSensor.getDistance()<77){	//2 pola
-					switch(aktualnaRotacjaRobotaNaMapie){
-					case NORTH:
-						mapVals[(int)pose.getX()/32+2][(int)pose.getY()/32]=FieldType.TOWER;
-						break;
-					case SOUTH:
-						mapVals[(int)pose.getX()/32-2][(int)pose.getY()/32]=FieldType.TOWER;
-						break;
-					case WEST:
-						mapVals[(int)pose.getX()/32][(int)pose.getY()/32-2]=FieldType.TOWER;
-						break;
-					case EAST:
-						mapVals[(int)pose.getX()/32][(int)pose.getY()/32+2]=FieldType.TOWER;
-						break;
-					}
+				// 2 pola do przodu
+				else if (docelowaForward != null &&  aktualnyOdczytUltraSensora<80)
+				{
+					map.markEmpty(docelowaPozycjaNaMapie);
+					map.markTower(docelowaForward);
 					break petla_sciezki; // - wymysl nowa sciezke
+				}
+				else
+				{
+					if (docelowaPozycjaNaMapie != null)
+						map.markEmpty(docelowaPozycjaNaMapie);
+					if (docelowaForward != null)
+						map.markEmpty(docelowaForward);
 				}
 				
 				// wjezdzamy na pole podawania pilki
@@ -146,8 +142,26 @@ public class Final {
 	
 	
 	public static void main(String[] args) {
-		//ultraSensor = new UltrasonicSensor(SensorPort.S1);
+		//
 	    Final f = new Final();
 	    f.run();
+	}
+	
+	public int odczytajUltra()
+	{
+		int suma = 0;
+		int liczbaProb = 5;
+		int zaliczoneProby = 0;
+		for(int i = 0; i < liczbaProb; ++i)
+		{
+			int proba = ultraSensor.getDistance();
+			if (proba == 255)
+				continue;
+			suma += proba;
+			++zaliczoneProby;
+		}
+		if (zaliczoneProby == 0)
+			return 255;
+		return suma / zaliczoneProby;
 	}
 }

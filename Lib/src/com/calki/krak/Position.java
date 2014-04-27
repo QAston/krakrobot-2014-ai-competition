@@ -44,6 +44,11 @@ public class Position {
 		return x*Map.SIZE + y;
 	}
 	
+	public String toString()
+	{
+		return "Pos"+x+y;
+	}
+	
 	public static boolean isValid(int x, int y)
 	{
 		return x >= 0 && x < Map.SIZE && y >= 0 && y < Map.SIZE;
