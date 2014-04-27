@@ -12,7 +12,6 @@ public class Map {
 	public void markTower(Position pos)
 	{
 		map[pos.x][pos.y] = FieldType.TOWER;
-		System.out.println("Marked tower: " + pos);
 	}
 	public void markEmpty(Position pos)
 	{

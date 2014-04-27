@@ -21,4 +21,9 @@ public class PositionUtil {
     	double newAngle = (Math.atan2(y-destY,x-destX));
     	return Math.toDegrees(angleDiff(Math.toRadians(heading), newAngle));
     }
+	public static double calcDistance(double x, double y, double heading,
+			double destX, double destY) {
+		// TODO Auto-generated method stub
+		return Math.sqrt((Math.pow((destX - x),2.0d)+(Math.pow(destY - y, 2.0d))));
+	}
 }

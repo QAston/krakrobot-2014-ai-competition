@@ -2,6 +2,7 @@ package com.calki.krak;
 
 import java.util.List;
 
+import lejos.nxt.Button;
 import lejos.nxt.Motor;
 import lejos.nxt.SensorPort;
 import lejos.nxt.Sound;
@@ -32,10 +33,10 @@ public class Final {
 		//opp.setPose(new Pose(x, y, heading));
 		position = new PositionProviderImpl(opp);
 		ultraSensor = new UltrasonicSensor(SensorPort.S1);
-		
+		opp.setPose(new Pose(162, 162, 0));
 	}
 	
-	void run()
+	void run() throws Throwable
 	{
 		//SETUP
 		FieldType[][] mapVals = {
@@ -76,34 +77,20 @@ public class Final {
 			petla_sciezki: while(i <= path.size()){
 				Position docelowaPozycjaNaMapie = path.get(i);
 				
-				Position docelowaForward = 
-						docelowaPozycjaNaMapie.getNeighbour(
-								aktualnaRotacjaRobotaNaMapie.relativeFrom(RelativeDirection.FRONT));
-				
-				
 				int aktualnyOdczytUltraSensora = odczytajUltra();
 				
 				System.out.println("Ultra: "+aktualnyOdczytUltraSensora);
 				
 				// 1 pole do przodu
-				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<45)
+				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<20)
 				{
 					map.markTower(docelowaPozycjaNaMapie);
-					break petla_sciezki; // - wymysl nowa sciezke
-				}
-				// 2 pola do przodu
-				else if (docelowaForward != null &&  aktualnyOdczytUltraSensora<80)
-				{
-					map.markEmpty(docelowaPozycjaNaMapie);
-					map.markTower(docelowaForward);
 					break petla_sciezki; // - wymysl nowa sciezke
 				}
 				else
 				{
 					if (docelowaPozycjaNaMapie != null)
 						map.markEmpty(docelowaPozycjaNaMapie);
-					if (docelowaForward != null)
-						map.markEmpty(docelowaForward);
 				}
 				
 				// wjezdzamy na pole podawania pilki
@@ -114,7 +101,10 @@ public class Final {
 					poleFinalowe = Position.get(4, 4);
 					
 					//czekaj i obrot o 90
-					//czekaj
+					pilot.travel(-20);
+					Thread.sleep(1000);
+					aktualnaRotacjaRobotaNaMapie = GlobalDirection.EAST;
+					pilot.travel(20);
 					//jazda
 				}
 				
@@ -122,15 +112,15 @@ public class Final {
 				if(docelowaPozycjaNaMapie==Position.get(4,4) && stanRobota == StanRobota.JAZDA_Z_PILKA){
 					Sound.setVolume(100);
 					Sound.twoBeeps();
-					System.exit(0);
+					Button.waitForAnyPress();
 				}
-				
-				pilot.rotate(Eliminacje.setDirection(pose, docelowaPozycjaNaMapie.getCartesianX(), docelowaPozycjaNaMapie.getCartesianY() ));
+				/*
+				pilot.rotate(PositionUtil.calcDirection(pose.getX(), pose.getY(), pose.getHeading(), docelowaPozycjaNaMapie.getCartesianX(),  docelowaPozycjaNaMapie.getCartesianY()));
 				//Metoda do zmiany kierunku heading robota
 				pose=opp.getPose();
-		    	pilot.travel(Eliminacje.setDistanceToPoint(pose, docelowaPozycjaNaMapie.getCartesianX(),docelowaPozycjaNaMapie.getCartesianY()));
-		    	pose=opp.getPose();
-		    	Eliminacje.lcdPokazMape();
+		    	pilot.travel(PositionUtil.calcDistance(pose.getX(), pose.getY(), pose.getHeading(), docelowaPozycjaNaMapie.getCartesianX(),docelowaPozycjaNaMapie.getCartesianY()));
+		    	pose=opp.getPose();*/
+		    	//Eliminacje.lcdPokazMape();
 		    	
 		    	aktualnaRotacjaRobotaNaMapie = aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie);
 		    	aktualnaPozycjaRobotaNaMapie = docelowaPozycjaNaMapie;
@@ -144,7 +134,13 @@ public class Final {
 	public static void main(String[] args) {
 		//
 	    Final f = new Final();
-	    f.run();
+	    try {
+			f.run();
+		} catch (Throwable e) {
+			Sound.setVolume(100);
+			Sound.twoBeeps();
+			Button.waitForAnyPress();
+		}
 	}
 	
 	public int odczytajUltra()
