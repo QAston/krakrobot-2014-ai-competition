@@ -18,6 +18,9 @@ public class Final {
 	//final BuiltinAstarPathFinder mapa;
 	final Ruchacz ruchacz;
 	
+	public PathFinder p;
+	public List<Position> path;
+	
 	public static Pose pose;
 		
 	Final()
@@ -65,19 +68,53 @@ public class Final {
 		while(i <= path.size()){
 			Position aktualnaPozycjaNaMapie = path.get(i);
 			if(ultraSensor.getDistance()>15 && ultraSensor.getDistance()<45){	//1 pole 
-				
-				//int direction = pose.getHeading();
-				//mapVals[(int)pose.getX()/32][(int)pose.getY()/32]
+				switch(aktualnaRotacjaRobotaNaMapie){
+				case NORTH:
+					mapVals[(int)pose.getX()/32+1][(int)pose.getY()/32]=FieldType.TOWER;
+					break;
+				case SOUTH:
+					mapVals[(int)pose.getX()/32-1][(int)pose.getY()/32]=FieldType.TOWER;
+					break;
+				case WEST:
+					mapVals[(int)pose.getX()/32][(int)pose.getY()/32-1]=FieldType.TOWER;
+					break;
+				case EAST:
+					mapVals[(int)pose.getX()/32][(int)pose.getY()/32+1]=FieldType.TOWER;
+					break;
+				}
 			}
 			
 			if(ultraSensor.getDistance()>48 && ultraSensor.getDistance()<77){	//2 pola
-				//mapVals[(int)pose.getX()/32][(int)pose.getY()/32]
+				switch(aktualnaRotacjaRobotaNaMapie){
+				case NORTH:
+					mapVals[(int)pose.getX()/32+2][(int)pose.getY()/32]=FieldType.TOWER;
+					break;
+				case SOUTH:
+					mapVals[(int)pose.getX()/32-2][(int)pose.getY()/32]=FieldType.TOWER;
+					break;
+				case WEST:
+					mapVals[(int)pose.getX()/32][(int)pose.getY()/32-2]=FieldType.TOWER;
+					break;
+				case EAST:
+					mapVals[(int)pose.getX()/32][(int)pose.getY()/32+2]=FieldType.TOWER;
+					break;
+				}
+			}
+			
+			if(aktualnaPozycjaNaMapie==Position.get(0,0)){
+				
+				//czekaj i obrot o 90
+				//czekaj
+				//zmiana wartosci pola finalowego
+				//jazda
 			}
 			
 			pilot.rotate(Eliminacje.setDirection(pose, aktualnaPozycjaNaMapie.getCartesianX(), aktualnaPozycjaNaMapie.getCartesianY() ));
+			//Metoda do zmiany kierunku heading robota
 			pose=opp.getPose();
 	    	pilot.travel(Eliminacje.setDistanceToPoint(pose, aktualnaPozycjaNaMapie.getCartesianX(),aktualnaPozycjaNaMapie.getCartesianY()));
 	    	pose=opp.getPose();
+	    	Eliminacje.lcdPokazMape();
 			i++;
 		}
 	}
