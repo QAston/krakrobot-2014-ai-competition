@@ -16,11 +16,7 @@ public class Final {
 	final Ruchacz ruchacz;
 	
 	public static Pose pose;
-	
-	public static void towerGetCartesian(Pose pose){
-		//b
-	}
-	
+		
 	Final()
 	{
 		pilot = new DifferentialPilot(8.3d,8.2d,18.5d,Motor.C,Motor.A,true);
