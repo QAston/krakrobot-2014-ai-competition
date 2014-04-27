@@ -22,14 +22,16 @@ public class Final {
 	public List<Position> path;
 	
 	public static Pose pose;
+	
+	public Position waitForBall = Position.get(0,0);
 		
 	Final()
 	{
-		pilot = new DifferentialPilot(4.32d, 12.4, Motor.A, Motor.C,true);
+		pilot = new DifferentialPilot(4.45d, 12.18, Motor.A, Motor.C,true);
 		opp = new OdometryPoseProvider(pilot);
 		
-		pilot.setAcceleration(15);
-		pilot.setTravelSpeed(25);
+		pilot.setAcceleration(35);
+		pilot.setTravelSpeed(30);
 		pilot.setRotateSpeed(35);
 		//opp.setPose(new Pose(x, y, heading));
 		position = new PositionProviderImpl(opp);
@@ -58,7 +60,7 @@ public class Final {
 				}
 		};
 		Position aktualnaPozycjaRobotaNaMapie = Position.get(4, 4);
-		Position poleFinalowe = Position.get(2, 2);
+		Position poleFinalowe = waitForBall;
 		GlobalDirection aktualnaRotacjaRobotaNaMapie = GlobalDirection.NORTH;
 		Map map = new Map(mapVals);
 		map.print();
@@ -91,7 +93,7 @@ public class Final {
 				System.out.println("Ultra: "+aktualnyOdczytUltraSensora);
 				
 				// 1 pole do przodu
-				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<40)
+				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<35)
 				{
 					map.markTower(docelowaPozycjaNaMapie);
 					break;
@@ -101,9 +103,14 @@ public class Final {
 					if (docelowaPozycjaNaMapie != null)
 						map.markEmpty(docelowaPozycjaNaMapie);
 				}
-					
+				
+				move(turn);
+		    	
+		    	aktualnaRotacjaRobotaNaMapie = aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie);
+		    	aktualnaPozycjaRobotaNaMapie = docelowaPozycjaNaMapie;
+		    	
 				// wjezdzamy na pole podawania pilki
-				if(docelowaPozycjaNaMapie==Position.get(2,2) && stanRobota == StanRobota.JAZDA_PO_PILKE){
+				if(aktualnaPozycjaRobotaNaMapie==waitForBall && stanRobota == StanRobota.JAZDA_PO_PILKE){
 					
 					//zmiana wartosci pola finalowego
 					stanRobota = StanRobota.JAZDA_Z_PILKA;
@@ -127,8 +134,7 @@ public class Final {
 					pilot.travel(-30);
 					Thread.sleep(5000);
 					aktualnaRotacjaRobotaNaMapie = GlobalDirection.EAST;
-					pilot.travel(26);
-					
+					pilot.travel(10);
 					break;
 				}
 				
@@ -138,11 +144,6 @@ public class Final {
 					Sound.twoBeeps();
 					Button.waitForAnyPress();
 				}
-				
-				move(turn);
-		    	
-		    	aktualnaRotacjaRobotaNaMapie = aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie);
-		    	aktualnaPozycjaRobotaNaMapie = docelowaPozycjaNaMapie;
 		    	
 				i++;
 			}
@@ -151,21 +152,7 @@ public class Final {
 	
 	public void move(RelativeDirection dir)
 	{
-		switch(dir)
-		{
-			case FRONT:
-				pilot.travel(32);
-				break;
-			case BACK:
-				pilot.travel(32);
-				break;
-			case LEFT:
-				pilot.travel(32);
-				break;
-			case RIGHT:
-				pilot.travel(32);
-				break;
-		}
+		pilot.travel(32);
 	}
 	
 	public void look(RelativeDirection dir)
