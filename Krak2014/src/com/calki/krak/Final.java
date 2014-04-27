@@ -53,7 +53,7 @@ public class Final {
 					FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN
 				},
 				{
-					FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN
+					FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.UNKNOWN, FieldType.EMPTY
 				}
 		};
 		Position aktualnaPozycjaRobotaNaMapie = Position.get(4, 4);
@@ -66,15 +66,14 @@ public class Final {
 		// glowna petla
 		while(true)
 		{
-			System.out.println("Mapa:");
-			map.print();
 			p = new MyAstarPathFinder(aktualnaPozycjaRobotaNaMapie, aktualnaRotacjaRobotaNaMapie, poleFinalowe, map);
 			path = p.getPath();
-			pose=opp.getPose();
 			
 			int i=0;
 			
-			petla_sciezki: while(i <= path.size()){
+			petla_sciezki: while(i < path.size()){
+				System.out.println("Mapa:");
+				map.print();
 				Position docelowaPozycjaNaMapie = path.get(i);
 				
 				int aktualnyOdczytUltraSensora = odczytajUltra();
@@ -114,19 +113,42 @@ public class Final {
 					Sound.twoBeeps();
 					Button.waitForAnyPress();
 				}
+				
+				RelativeDirection turn = aktualnaRotacjaRobotaNaMapie.turnAsRelative(aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie));
+				
+				move(turn);
 				/*
 				pilot.rotate(PositionUtil.calcDirection(pose.getX(), pose.getY(), pose.getHeading(), docelowaPozycjaNaMapie.getCartesianX(),  docelowaPozycjaNaMapie.getCartesianY()));
 				//Metoda do zmiany kierunku heading robota
 				pose=opp.getPose();
 		    	pilot.travel(PositionUtil.calcDistance(pose.getX(), pose.getY(), pose.getHeading(), docelowaPozycjaNaMapie.getCartesianX(),docelowaPozycjaNaMapie.getCartesianY()));
-		    	pose=opp.getPose();*/
-		    	//Eliminacje.lcdPokazMape();
+		    	pose=opp.getPose();
+		    	//Eliminacje.lcdPokazMape();*/
 		    	
 		    	aktualnaRotacjaRobotaNaMapie = aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie);
 		    	aktualnaPozycjaRobotaNaMapie = docelowaPozycjaNaMapie;
 		    	
 				i++;
 			}
+		}
+	}
+	
+	public void move(RelativeDirection dir)
+	{
+		switch(dir)
+		{
+			case FRONT:
+				pilot.travel(32);
+				break;
+			case BACK:
+				pilot.rotate(180);
+				break;
+			case LEFT:
+				pilot.rotate(-90);
+				break;
+			case RIGHT:
+				pilot.rotate(90);
+				break;
 		}
 	}
 	
