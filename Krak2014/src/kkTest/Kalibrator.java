@@ -16,20 +16,27 @@ public class Kalibrator {
    	 double zm1 = Math.abs(newAngle - currAngle);
    	 double zm2 = Math.abs(newAngle-currAngle+2*Math.PI);
    	 double zm3 = Math.abs(newAngle-currAngle-2*Math.PI);
+   	// System.out.print("kat1: ");System.out.println(zm1);
+   	//System.out.print("kat2: ");System.out.println(zm2);
+   	//System.out.print("kat3: ");System.out.println(zm3);
+   	//System.out.print("min: ");System.out.println(Math.min(zm1, Math.min(zm2, zm3)));
    	 return Math.min(zm1, Math.min(zm2, zm3));
     }
     //---- obie funkcje przyjmuja wartoœci dodatnie, zarówno dla x jak i y --//
     //zwraca wartoœæ o jak¹ ma obróciæ siê robot aby staæ przodem do docelowych wspó³rzênych x,y
     public static double setDirection(Pose actualPose, double destX, double destY){
-    	double newAngle = (Math.atan2(actualPose.getLocation().getY()-destY,actualPose.getLocation().getX()+destX));
+    	System.out.println("x: "+ actualPose.getLocation().getX()+" y: "+actualPose.getLocation().getY());
+    	double newAngle = (Math.atan2(actualPose.getLocation().getY()+destY,actualPose.getLocation().getX()+destX));
+    	System.out.print("newAngle: ");
+    	System.out.println(newAngle);
     	return -(Math.toDegrees(angleDiff(Math.toRadians(actualPose.getHeading()), newAngle)));
     }//u¿ycie:
     // pilot.rotate(setDirection(pose, 128.0d,128.0d); -> podaje mu aktualna pozycjê oraz punkt w którego strone ma sie obórcic
     
     public static double setDistanceToPoint(Pose actualPose, double destX, double destY){
-    	destX = -destX;
+    	//destX = -destX;
     	double d = Math.sqrt((Math.pow((destX - actualPose.getLocation().getX()),2.0d)+(Math.pow((destY - actualPose.getLocation().getY()), 2.0d))));
-    	LCD.drawString(Double.toString(d), 0, 1);
+    	//LCD.drawString(Double.toString(d), 0, 1);
     	return d;
     }//u¿ycie: 
     // pose = opp.getPose() -> pobieram aktualn¹ pozycjê uwzglêdniajaca ewentualne zmiany podczas obrotu
@@ -47,7 +54,7 @@ public class Kalibrator {
 	     
 	     
 	     Pose pose = opp.getPose();
-	     System.out.print(Battery.getVoltage());
+	     System.out.println(Battery.getVoltage());
 
 	     /*pilot.travel(32);
 	     pose = opp.getPose();
@@ -77,9 +84,19 @@ public class Kalibrator {
 	     }
 	     pilot.quickStop();*/
 	     //pilot.rotate(Math.toDegrees(angleDiff(Math.toRadians(pose.getHeading()), newAngle)));
-	     pilot.rotate(setDirection(pose, 128d, 128.0d));
+	     pilot.rotate(setDirection(pose, 128.0d, 0.0d));
 	     pose = opp.getPose();
-	     pilot.travel(setDistanceToPoint(pose, 128.0d, 128.0d));
+	     //System.out.print(pose.getHeading());
+	     //System.out.print(pose.getLocation().getX());
+	     //System.out.print(pose.getLocation().getY());
+	     pilot.travel(setDistanceToPoint(pose, -128.0d, 0.0d));
+	     pose=opp.getPose();
+	     //System.out.println(pose.getHeading());
+	     //System.out.println(pose.getLocation().getX());
+	     //System.out.println(pose.getLocation().getY());
+	     pilot.rotate(setDirection(pose, 0d, 0d));
+	     pose = opp.getPose();
+	     pilot.travel(setDistanceToPoint(pose, 0d, 0d));
 
 	     
 	     //pilot.rotate((double)diff);
