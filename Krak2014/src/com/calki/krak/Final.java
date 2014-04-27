@@ -58,7 +58,7 @@ public class Final {
 				}
 		};
 		Position aktualnaPozycjaRobotaNaMapie = Position.get(4, 4);
-		Position poleFinalowe = Position.get(0, 0);
+		Position poleFinalowe = Position.get(2, 2);
 		GlobalDirection aktualnaRotacjaRobotaNaMapie = GlobalDirection.NORTH;
 		Map map = new Map(mapVals);
 		map.print();
@@ -84,12 +84,14 @@ public class Final {
 				
 				look(turn);
 				
+				aktualnaRotacjaRobotaNaMapie = aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie);
+				
 				int aktualnyOdczytUltraSensora = odczytajUltra();
 				
 				System.out.println("Ultra: "+aktualnyOdczytUltraSensora);
 				
 				// 1 pole do przodu
-				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<50)
+				if (docelowaPozycjaNaMapie != null && aktualnyOdczytUltraSensora<40)
 				{
 					map.markTower(docelowaPozycjaNaMapie);
 					break;
@@ -101,17 +103,32 @@ public class Final {
 				}
 					
 				// wjezdzamy na pole podawania pilki
-				if(docelowaPozycjaNaMapie==Position.get(0,0) && stanRobota == StanRobota.JAZDA_PO_PILKE){
+				if(docelowaPozycjaNaMapie==Position.get(2,2) && stanRobota == StanRobota.JAZDA_PO_PILKE){
 					
 					//zmiana wartosci pola finalowego
 					stanRobota = StanRobota.JAZDA_Z_PILKA;
 					poleFinalowe = Position.get(4, 4);
 					
-					//czekaj i obrot o 90
-					pilot.travel(-20);
-					Thread.sleep(1000);
+					switch(aktualnaRotacjaRobotaNaMapie)
+					{
+					case EAST:
+						break;
+					case WEST:
+						look(RelativeDirection.BACK);
+						break;
+					case NORTH:
+						look(RelativeDirection.RIGHT);
+						break;
+					case SOUTH:
+						look(RelativeDirection.LEFT);
+						break;
+						
+					}
+					pilot.travel(-30);
+					Thread.sleep(5000);
 					aktualnaRotacjaRobotaNaMapie = GlobalDirection.EAST;
-					pilot.travel(20);
+					pilot.travel(26);
+					
 					break;
 				}
 				
@@ -123,13 +140,6 @@ public class Final {
 				}
 				
 				move(turn);
-				/*
-				pilot.rotate(PositionUtil.calcDirection(pose.getX(), pose.getY(), pose.getHeading(), docelowaPozycjaNaMapie.getCartesianX(),  docelowaPozycjaNaMapie.getCartesianY()));
-				//Metoda do zmiany kierunku heading robota
-				pose=opp.getPose();
-		    	pilot.travel(PositionUtil.calcDistance(pose.getX(), pose.getY(), pose.getHeading(), docelowaPozycjaNaMapie.getCartesianX(),docelowaPozycjaNaMapie.getCartesianY()));
-		    	pose=opp.getPose();
-		    	//Eliminacje.lcdPokazMape();*/
 		    	
 		    	aktualnaRotacjaRobotaNaMapie = aktualnaPozycjaRobotaNaMapie.getLineDirection(docelowaPozycjaNaMapie);
 		    	aktualnaPozycjaRobotaNaMapie = docelowaPozycjaNaMapie;
@@ -168,10 +178,10 @@ public class Final {
 				pilot.rotate(180);
 				break;
 			case LEFT:
-				pilot.rotate(90);
+				pilot.rotate(-90);
 				break;
 			case RIGHT:
-				pilot.rotate(-90);
+				pilot.rotate(90);
 				break;
 		}
 	}
