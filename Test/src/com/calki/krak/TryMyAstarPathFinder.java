@@ -16,7 +16,7 @@ public class TryMyAstarPathFinder {
 					FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY
 				},
 				{
-					FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY
+					FieldType.TOWER, FieldType.EMPTY, FieldType.TOWER, FieldType.TOWER, FieldType.TOWER
 				},
 				{
 					FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY, FieldType.EMPTY

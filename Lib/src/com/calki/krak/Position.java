@@ -45,13 +45,13 @@ public class Position {
 	    switch(globalDirection)
 	    {
 	       case NORTH:
-	    	  return get(this.x, this.y - 1);
+	    	  return get(this.x- 1, this.y );
 	       case SOUTH:
-		      return get(this.x, this.y +1);
+		      return get(this.x+1, this.y );
 	       case EAST:
-	    	   return get(this.x+1, this.y );
+	    	   return get(this.x, this.y +1);
 	       case WEST:
-	    	   return get(this.x-1, this.y );
+	    	   return get(this.x, this.y -1);
 	    }
 	    return null; 
 	}
